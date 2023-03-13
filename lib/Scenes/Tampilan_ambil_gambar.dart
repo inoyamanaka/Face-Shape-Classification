@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:face_shape/Scenes/Tampilan_hasil.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
@@ -5,6 +7,9 @@ import 'package:face_shape/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -19,6 +24,7 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isCameraInitialized = false;
   bool _isFrontCamera = false;
   bool _isFlashOn = false;
+  late CameraController controller;
 
   void _toggleCameraDirection() async {
     final lensDirection =
@@ -36,12 +42,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> initCamera() async {
     _cameras = await availableCameras();
-    _controller = CameraController(_cameras[0], ResolutionPreset.medium);
+    _controller = CameraController(_cameras[1], ResolutionPreset.medium);
     await _controller.initialize();
     setState(() {
       _isCameraInitialized = true;
-
-      // if (_isCameraInitialized == true) {}
     });
   }
 
@@ -55,6 +59,20 @@ class _CameraScreenState extends State<CameraScreen> {
       _controller.setFlashMode(FlashMode.torch);
     } else {
       _controller.setFlashMode(FlashMode.off);
+    }
+  }
+
+  Future<http.Response> _sendImage(String imagePath) async {
+    final url = Uri.parse('http://782b-139-0-53-41.ngrok.io/upload');
+
+    final request = http.MultipartRequest('POST', url);
+    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final String responseData = await response.stream.bytesToString();
+      return http.Response(responseData, 200);
+    } else {
+      throw Exception('Failed to upload image');
     }
   }
 
@@ -89,13 +107,11 @@ class _CameraScreenState extends State<CameraScreen> {
                 padding: const EdgeInsets.all(10),
                 child: InkWell(
                   onTap: () {
-                    // Tindakan yang akan dilakukan saat gambar ditekan
                     Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeftWithFade,
                           child: MainMenu()),
-                      // ),
                     );
                   },
                   child: Image.asset(
@@ -124,7 +140,7 @@ class _CameraScreenState extends State<CameraScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              "Arahkan muka pada kamera lalu tunggu sesaat hingga kamera mendeteksi dan menangkap gambar.",
+              "Arahkan muka pada kamera lalu tekan button kamera yang ada di tengah untuk menangkap gambar.",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 16,
@@ -167,7 +183,6 @@ class _CameraScreenState extends State<CameraScreen> {
                           : Container(),
                     )),
                 Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -182,8 +197,6 @@ class _CameraScreenState extends State<CameraScreen> {
                         child: SvgPicture.asset(
                           "Assets/Svgs/face_line.svg",
                           height: 250,
-
-                          // fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -212,7 +225,35 @@ class _CameraScreenState extends State<CameraScreen> {
                           "Assets/Svgs/camera_reverse.svg",
                         ),
                       ),
-                      SvgPicture.asset("Assets/Svgs/camera_take.svg"),
+                      GestureDetector(
+                          onTap: () async {
+                            final directory =
+                                await getExternalStorageDirectory();
+                            final filePath = path.join(
+                              directory!.path,
+                              '${DateTime.now()}.png',
+                            );
+                            XFile picture = await _controller.takePicture();
+                            picture.saveTo(filePath);
+                            final responseCode = await _sendImage(filePath);
+
+                            if (responseCode.statusCode == 200) {
+                              // Navigate to new screen
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeftWithFade,
+                                  child: ReportScreen(),
+                                ),
+                              );
+                            } else {
+                              // Handle error uploading image to server
+                              print('Failed to upload image: ${responseCode}');
+                            }
+                            print("filepath : " + filePath);
+                          },
+                          child:
+                              SvgPicture.asset("Assets/Svgs/camera_take.svg")),
                       GestureDetector(
                         onTap: () {
                           // fungsi ketika gambar ditekan
