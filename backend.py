@@ -3,6 +3,7 @@ import os
 import cv2
 import mediapipe as mp
 import numpy as np
+from pyngrok import ngrok
 
 app = Flask(__name__)
 
@@ -17,16 +18,17 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 # INITIALIZING OBJECTS
 mp_drawing = mp.solutions.drawing_utils
 mp_face_mesh = mp.solutions.face_mesh
-
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -43,41 +45,22 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         detect_landmark(filepath)
-        # upload()
         return jsonify({'message': 'File successfully uploaded'})
 
     return jsonify({'message': 'Allowed file types are png, jpg, jpeg, gif'}), 400
 
-def upload():
-    # Check if file is sent in the request
-    if 'file' not in request.files:
-        return jsonify({'message': 'No file part in the request'}), 400
-
-    # Loop through each file sent in the request
-    urls = []
-    for file in request.files.getlist('file'):
-        # Check if file is allowed
-        if file and allowed_file(file.filename):
-            # Save file to disk
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            urls.append(f'http://192.168.1.113:8000/static/{filename}')
-        else:
-            return jsonify({'message': 'Allowed file types are png, jpg, jpeg'}), 400
-
-    return jsonify({'urls': urls})
 
 @app.route('/get_images')
 def get_images():
     urls = []
     for i in range(1, 4):
         filename = f'result_upload{i}.jpg'
-        url = f'http://192.168.1.113:8000/static/{filename}'
+        url = f'{public_url}/static/{filename}'
         urls.append(url)
     return jsonify({'urls': urls})
 
 def detect_landmark(filepath):
+    print("jalan : ", filepath)
     # READ IMAGE FILE
     image1 = cv2.imread(filepath)
     image1 = cv2.resize(image1, (220, 280), interpolation=cv2.INTER_AREA)
@@ -128,4 +111,9 @@ def detect_landmark(filepath):
         cv2.imwrite('./static/result_upload3.jpg', subtracted_img)
 
 if __name__ == '__main__':
-    app.run(port=8000, host='192.168.1.113')
+    # app.run(port=8000, host='192.168.1.113')
+    public_url = ngrok.connect(5000).public_url
+    print(f' * Running on {public_url}')
+
+    # Menjalankan aplikasi Flask
+    app.run(port=5000)
