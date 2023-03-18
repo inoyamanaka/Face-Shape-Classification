@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 // import 'path/to/camera_screen.dart';
 
 class CostumMedia extends StatelessWidget {

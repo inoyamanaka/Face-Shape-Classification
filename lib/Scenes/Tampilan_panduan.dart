@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
 import 'package:face_shape/widgets/custom_button.dart';
@@ -68,7 +67,7 @@ class _PanduanScreenState extends State<PanduanScreen> {
             height: 10,
           ),
           Container(
-            height: 330,
+            height: 300,
             width: 330,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
@@ -83,7 +82,7 @@ class _PanduanScreenState extends State<PanduanScreen> {
                       ))
                   .toList(),
               options: CarouselOptions(
-                height: 300,
+                height: 250,
                 aspectRatio: 16 / 9,
                 viewportFraction: 0.8,
                 enableInfiniteScroll: true,
@@ -102,7 +101,7 @@ class _PanduanScreenState extends State<PanduanScreen> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

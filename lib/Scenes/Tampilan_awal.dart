@@ -1,3 +1,5 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:face_shape/Scenes/Tampilan_mode.dart';
 import 'package:face_shape/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,79 +17,34 @@ class SplashScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        width: width,
-        height: height,
-        // color: Colors.amber,
-        color: Color.fromARGB(255, 204, 218, 253),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Selamat Datang .....",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Face Shape Classification",
-                      style: TextStyle(
-                          fontSize: 23,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w800),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Tekan Mulai untuk melanjutkan!",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ],
+        color: Colors.amber,
+        child: AnimatedSplashScreen(
+          duration: 3000,
+          splash: Container(
+            child: Stack(children: [
+              Image.asset(
+                "Assets/Images/Tampilan awal.png",
+                height: height,
+                width: width,
+                fit: BoxFit.fill,
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: Image.asset(
+                    "Assets/Images/icon_splash.png",
+                    width: 150,
+                    height: 150,
+
+                    // fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Image.asset("Assets/Images/splashscreen.jpg",
-                width: 300, height: 350),
-            SizedBox(
-              height: 30,
-            ),
-            CustomButton(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    type: PageTransitionType.size,
-                    alignment: Alignment.center,
-                    duration: Duration(seconds: 1),
-                    child: MainMenu(),
-                  ),
-                );
-              },
-              text: "Mulai",
-              imageAsset: "Assets/Icons/play.png",
-              width: 40,
-              height: 40,
-            ),
-          ],
+            ]),
+          ),
+          nextScreen: MenuMode(),
+          splashTransition: SplashTransition.fadeTransition,
+          splashIconSize: height,
         ),
       ),
     );

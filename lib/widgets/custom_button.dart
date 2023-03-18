@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
