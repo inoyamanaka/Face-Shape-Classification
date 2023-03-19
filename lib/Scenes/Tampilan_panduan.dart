@@ -71,7 +71,6 @@ class _PanduanScreenState extends State<PanduanScreen> {
             width: 330,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-              // color: Color.fromARGB(255, 217, 217, 217),
             ),
             child: CarouselSlider(
               items: imageList

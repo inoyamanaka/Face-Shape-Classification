@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomHeader extends StatelessWidget {
-  final String isi;
-  const CustomHeader({
-    Key? key,
-    required this.isi,
-  }) : super(key: key);
-
+class ImagePreprocessingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +16,7 @@ class CustomHeader extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          this.isi,
+          "Image Preprocessing",
           style: TextStyle(
             color: Colors.white,
             fontSize: 22,

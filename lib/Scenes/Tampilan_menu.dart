@@ -2,12 +2,15 @@
 
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:face_shape/Datas/url_host.dart';
 import 'package:face_shape/Scenes/Tampilan_ambil_gambar.dart';
 import 'package:face_shape/Scenes/Tampilan_hasil.dart';
 import 'package:face_shape/Scenes/Tampilan_mode.dart';
 import 'package:face_shape/Scenes/Tampilan_panduan.dart';
+import 'package:face_shape/widgets/custom_backbtn.dart';
 import 'package:face_shape/widgets/custom_button.dart';
 import 'package:face_shape/widgets/custom_media.dart';
+import 'package:face_shape/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,7 +31,9 @@ class _MainMenuState extends State<MainMenu> {
   late File _imageFile;
   bool _isLoading = false;
 
-  String urlh = "http://ce71-139-0-239-34.ngrok.io/upload";
+  //------------------------------------------
+  String urlh = "http://ce71-139-0-239-34.ngrok.io";
+  //------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -41,37 +46,18 @@ class _MainMenuState extends State<MainMenu> {
           width: width,
           height: height,
           child: Column(children: [
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.rightToLeftWithFade,
-                              child: MenuMode()),
-                        );
-                      },
-                      child: Image.asset(
-                        "Assets/Icons/back.png",
-                        width: 35,
-                        height: 35,
-                      ),
-                    ),
+            Container(child: CustomBackButton(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: MenuMode(),
                   ),
-                  SvgPicture.asset(
-                    "Assets/Svgs/hiasan_atas.svg",
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
+                );
+              },
+            )),
+            SizedBox(height: 15),
             Text(
               "Pilih media",
               style: TextStyle(
@@ -79,9 +65,7 @@ class _MainMenuState extends State<MainMenu> {
                   fontFamily: 'Urbanist',
                   fontWeight: FontWeight.w700),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -95,9 +79,7 @@ class _MainMenuState extends State<MainMenu> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 25,
-            ),
+            SizedBox(height: 25),
             CostumMedia(
               onTap: () async {
                 final picker = ImagePicker();
@@ -107,8 +89,7 @@ class _MainMenuState extends State<MainMenu> {
                   _isLoading = true;
                 });
                 if (pickedFile != null) {
-                  final url =
-                      Uri.parse('http://ce71-139-0-239-34.ngrok.io/upload');
+                  final url = Uri.parse('${ApiUrl.Url}/upload');
 
                   final request = http.MultipartRequest('POST', url)
                     ..files.add(await http.MultipartFile.fromPath(
@@ -161,18 +142,44 @@ class _MainMenuState extends State<MainMenu> {
                       )..show();
                       // Lakukan sesuatu jika terjadi kesalahan dalam upload file
                     }
+                  } else if (response.statusCode == 307) {
+                    AwesomeDialog(
+                      context: context,
+                      title: "Server Bermasalah",
+                      body: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Mohon maaf saat ini server sedang bermasalah, mohon hubungi pemilik server untuk masalah ini",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnOkColor: Colors.red,
+                      btnOkText: "Kembali",
+                      btnOkOnPress: () {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      },
+                    )..show();
                   } else {
                     print(
                         'Request failed with status: ${response.statusCode}.');
                   }
                 }
               },
-              text: "Pilih Gambar",
+              text: "Gallery",
               imageAsset: 'Assets/Images/gallery.jpg',
             ),
-            SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 15),
             CostumMedia(
               onTap: () {
                 Navigator.push(
@@ -185,12 +192,10 @@ class _MainMenuState extends State<MainMenu> {
                   // ),
                 );
               },
-              text: "Ambil Gambar",
+              text: "Camera",
               imageAsset: 'Assets/Images/camera.jpg',
             ),
-            SizedBox(
-              height: 35,
-            ),
+            SizedBox(height: 35),
             CustomButton(
               onTap: () {
                 Navigator.push(
@@ -215,53 +220,7 @@ class _MainMenuState extends State<MainMenu> {
             ),
           ]),
         ),
-        Visibility(
-          visible: _isLoading,
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(10.0), // set border rounder
-                  color: Colors.black,
-                ),
-                child: ModalBarrier(
-                  dismissible: false,
-                  color: Colors.transparent,
-                ),
-              ),
-              Center(
-                child: Container(
-                  width: 230,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SpinKitSquareCircle(
-                        color: Color.fromARGB(255, 80, 101, 252),
-                        size: 50.0,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Mohon Tunggu Sebentar..",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        LoadingOverlay(isLoading: _isLoading)
       ]),
     );
   }

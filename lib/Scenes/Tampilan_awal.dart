@@ -1,10 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:face_shape/Scenes/Tampilan_mode.dart';
-import 'package:face_shape/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-
-import 'Tampilan_menu.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -19,7 +15,7 @@ class SplashScreen extends StatelessWidget {
       body: Container(
         color: Colors.amber,
         child: AnimatedSplashScreen(
-          duration: 3000,
+          duration: 5000,
           splash: Container(
             child: Stack(children: [
               Image.asset(
@@ -32,9 +28,9 @@ class SplashScreen extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: Image.asset(
-                    "Assets/Images/icon_splash.png",
-                    width: 150,
-                    height: 150,
+                    "Assets/Images/icon_splash.gif",
+                    width: 170,
+                    height: 170,
 
                     // fit: BoxFit.fill,
                   ),

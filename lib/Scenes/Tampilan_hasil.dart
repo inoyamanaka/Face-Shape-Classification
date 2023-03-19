@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:face_shape/Datas/url_host.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
-import 'package:face_shape/Scenes/data.dart';
 import 'package:face_shape/widgets/custom_button.dart';
-import 'package:face_shape/widgets/parallax_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import '../Datas/data_ciri_wajah.dart';
 
@@ -35,7 +34,9 @@ class _ReportScreenState extends State<ReportScreen> {
     "Landmark Extraction"
   ];
 
+  //------------------------------------------
   String _bentuk_wajah = "";
+  //------------------------------------------
 
   List<String> _imageUrls = [];
 
@@ -51,8 +52,7 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Future<void> fetchImages() async {
-    final response = await http
-        .get(Uri.parse('http://d844-139-0-239-34.ngrok.io/get_images'));
+    final response = await http.get(Uri.parse('${ApiUrl.Url}/get_images'));
     if (response.statusCode == 200) {
       final List<dynamic> urls = jsonDecode(response.body)['urls'];
       _bentuk_wajah = jsonDecode(response.body)['bentuk wajah'];
@@ -87,7 +87,7 @@ class _ReportScreenState extends State<ReportScreen> {
       body: Column(
         children: [
           Container(
-            height: height * 0.85,
+            height: height * 0.89,
             child: SingleChildScrollView(
               child: Container(
                 child: Column(children: [
@@ -147,6 +147,19 @@ class _ReportScreenState extends State<ReportScreen> {
                                   child: Image.network(
                                     image,
                                     fit: BoxFit.cover,
+                                    errorBuilder: (BuildContext context,
+                                        Object exception,
+                                        StackTrace? stackTrace) {
+                                      // Jika gambar gagal dimuat karena kesalahan, tampilkan efek shimmer sebagai gantinya
+                                      return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          color: Colors.grey[300],
+                                        ),
+                                        period: Duration(milliseconds: 800),
+                                      );
+                                    },
                                   ),
                                 ),
                               );

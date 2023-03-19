@@ -78,12 +78,6 @@ class _MenuModeState extends State<MenuMode> {
               }).toList(),
               options: CarouselOptions(
                 height: 330,
-
-                // aspectRatio: 16 / 9,
-                // viewportFraction: 0.8,
-                // enableInfiniteScroll: true,
-                // reverse: false,
-                // autoPlay: true,
                 autoPlayInterval: Duration(seconds: 3),
                 autoPlayCurve: Curves.fastOutSlowIn,
                 enlargeCenterPage: true,
