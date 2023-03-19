@@ -19,7 +19,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__, template_folder='./templates')
 
 UPLOAD_FOLDER = './upload'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','zip'}
 list_class = ['Diamond','Oblong','Oval','Round','Square','Triangle']
 
 # INITIALIZING OBJECTS
@@ -27,6 +27,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_face_mesh = mp.solutions.face_mesh
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500 MB
 
 
 def allowed_file(filename):
@@ -36,6 +37,8 @@ def allowed_file(filename):
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
+
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -59,14 +62,31 @@ def upload_file():
             print(filepath)
             preprocessing(filepath)
 
-
-
             return jsonify({'message': 'File successfully uploaded'})
         except:
             path = "empty_image.png"
             return jsonify({'message': 'File failed to uploaded'})
 
     return jsonify({'message': 'Allowed file types are png, jpg, jpeg, gif'}), 400
+
+@app.route('/upload_data', methods=['POST'])
+def upload_data():
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part in the request'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'message': 'No file selected for uploading'}), 400
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        return jsonify({'message': 'File successfully uploaded'})
+
+    return jsonify({'message': 'File failed to uploaded'})
 
 
 @app.route('/get_images')
@@ -175,8 +195,8 @@ def prediction():
 if __name__ == '__main__':
     # app.run(port=8000, host='192.168.1.113')
     # ngrok.set_config(http_tunnel_port="8080")
-    public_url = ngrok.connect(5000).public_url
+    public_url = ngrok.connect(8000).public_url
     print(f' * Running on {public_url}')
 
     # Menjalankan aplikasi Flask
-    app.run(port=5000)
+    app.run(port=8000)
