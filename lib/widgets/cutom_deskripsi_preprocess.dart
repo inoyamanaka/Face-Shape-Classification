@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:face_shape/Datas/url_host.dart';
 
 class FaceCroppingCard extends StatefulWidget {
   final String deskripsi;
-  const FaceCroppingCard({Key? key, required this.deskripsi}) : super(key: key);
+  final String gambar;
+  final String tahap;
+
+  const FaceCroppingCard({
+    Key? key,
+    required this.deskripsi,
+    required this.gambar,
+    required this.tahap,
+  }) : super(key: key);
 
   @override
   _FaceCroppingCardState createState() => _FaceCroppingCardState();
 }
 
 class _FaceCroppingCardState extends State<FaceCroppingCard> {
-  bool _switchValue = false;
+  bool _switchValue = true;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
-    ;
     return Center(
       child: Container(
-        height: 330,
+        height: 350,
         width: width * 0.8,
         decoration: BoxDecoration(
             border: Border.all(width: 1),
@@ -32,7 +40,7 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
-                  "Assets/Images/face_cropping.png",
+                  widget.gambar,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -73,10 +81,20 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: Switch(
                   value: _switchValue,
-                  onChanged: (bool value) {
+                  onChanged: (bool value) async {
                     setState(() {
-                      _switchValue = value;
+                      if (_switchValue == false) {
+                        _switchValue = true;
+                      } else if (_switchValue == true) {
+                        _switchValue = false;
+                      }
+
+                      // Mengirim status switch ke server Flask Python
                     });
+                    final response = await http.post(
+                      Uri.parse('${ApiUrl.Url}/${widget.tahap}'),
+                      body: {'status': _switchValue.toString()},
+                    );
                   },
                   activeColor: Colors.green,
                   inactiveTrackColor: Colors.red,

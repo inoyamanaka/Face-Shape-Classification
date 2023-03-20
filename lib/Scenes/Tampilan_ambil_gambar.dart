@@ -49,7 +49,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> initCamera() async {
     _cameras = await availableCameras();
-    _controller = CameraController(_cameras[1], ResolutionPreset.medium);
+    _controller = CameraController(_cameras[0], ResolutionPreset.medium);
     await _controller.initialize();
     setState(() {
       _isCameraInitialized = true;
@@ -130,260 +130,267 @@ class _CameraScreenState extends State<CameraScreen> {
     String? filePath;
 
     return Scaffold(
-        body: Stack(children: [
-      Container(
-        width: width,
-        height: height,
-        child: Column(children: [
-          Container(child: CustomBackButton(
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.rightToLeftWithFade,
-                  child: MainMenu(),
+        body: WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainMenu()));
+        return false;
+      },
+      child: Stack(children: [
+        Container(
+          width: width,
+          height: height,
+          child: Column(children: [
+            Container(child: CustomBackButton(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: MainMenu(),
+                  ),
+                );
+              },
+            )),
+            SizedBox(height: 15),
+            Text(
+              "Deteksi Muka",
+              style: TextStyle(
+                  fontSize: 28,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "Arahkan muka pada kamera lalu tekan button kamera yang ada di tengah untuk menangkap gambar.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w300),
                 ),
-              );
-            },
-          )),
-          SizedBox(height: 15),
-          Text(
-            "Deteksi Muka",
-            style: TextStyle(
-                fontSize: 28,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w700),
-          ),
-          SizedBox(height: 10),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "Arahkan muka pada kamera lalu tekan button kamera yang ada di tengah untuk menangkap gambar.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w300),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-              width: 280,
-              height: 350,
-              child: Stack(
-                children: [
-                  Positioned(
-                      bottom: 35,
-                      left: 0,
-                      right: 0,
-                      top: 5,
-                      child: Container(
-                        height: 320,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Color.fromARGB(255, 217, 217, 217),
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: _isCameraInitialized
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: AspectRatio(
-                                  aspectRatio: 16.9 / 9.0,
-                                  child: CameraPreview(_controller),
-                                ),
-                              )
-                            : Container(),
-                      )),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Positioned(
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                width: 280,
+                height: 350,
+                child: Stack(
+                  children: [
+                    Positioned(
+                        bottom: 35,
+                        left: 0,
+                        right: 0,
                         top: 5,
-                        left: 40,
                         child: Container(
-                          width: 280,
-                          // height: 300,
-                          child: SvgPicture.asset(
-                            "Assets/Svgs/face_line.svg",
-                            height: 250,
+                          height: 320,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: Color.fromARGB(255, 217, 217, 217),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(width: 45),
-                        GestureDetector(
-                          onTap: () {
-                            // fungsi ketika gambar ditekan
-                            _toggleCameraDirection();
-
-                            if (_isFrontCamera == false) {
-                              _isFlashOn = true;
-                            } else if (_isFrontCamera == true) {
-                              _isFlashOn = false;
-                            }
-                          },
-                          child: SvgPicture.asset(
-                            "Assets/Svgs/camera_reverse.svg",
-                          ),
-                        ),
-                        GestureDetector(
-                            onTap: () async {
-                              final directory =
-                                  await getExternalStorageDirectory();
-                              filePath = path.join(
-                                directory!.path,
-                                '${DateTime.now()}.png',
-                              );
-                              XFile picture = await _controller.takePicture();
-                              picture.saveTo(filePath!);
-
-                              print("filepath : " + filePath!);
-
-                              AwesomeDialog(
-                                context: context,
-                                title: "Gambar tersimpan",
-                                desc:
-                                    "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
-                                dialogType: DialogType.success,
-                                animType: AnimType.bottomSlide,
-                                btnOkOnPress: () {},
-                                body: Container(
-                                  child: Column(
-                                    children: [
-                                      Image.file(
-                                        File(filePath!),
-                                        width: 230,
-                                        height: 250,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Text(
-                                          "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      )
-                                    ],
+                          child: _isCameraInitialized
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: AspectRatio(
+                                    aspectRatio: 16.9 / 9.0,
+                                    child: CameraPreview(_controller),
                                   ),
-                                ),
-                              )..show();
-                            },
+                                )
+                              : Container(),
+                        )),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Positioned(
+                          top: 5,
+                          left: 40,
+                          child: Container(
+                            width: 280,
+                            // height: 300,
                             child: SvgPicture.asset(
-                                "Assets/Svgs/camera_take.svg")),
-                        GestureDetector(
-                          onTap: () {
-                            // fungsi ketika gambar ditekan
-                            _toggleFlash();
-                          },
-                          child: SvgPicture.asset(
-                            _isFlashOn
-                                ? "Assets/Svgs/flash_off.svg"
-                                : "Assets/Svgs/flash_on.svg",
+                              "Assets/Svgs/face_line.svg",
+                              height: 250,
+                            ),
                           ),
                         ),
-                        SizedBox(width: 45),
                       ],
                     ),
-                  ),
-                ],
-              )),
-          SizedBox(height: 15),
-          CustomButton(
-            onTap: () async {
-              setState(() {
-                _isLoading = true;
-              });
+                    Positioned(
+                      bottom: 5,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(width: 45),
+                          GestureDetector(
+                            onTap: () {
+                              // fungsi ketika gambar ditekan
+                              _toggleCameraDirection();
 
-              final response = await _sendImage(filePath!);
-              if (response.statusCode == 200) {
-                final jsonResponse = json.decode(response.body);
-                print("response: " + jsonResponse.toString());
-                if (jsonResponse['message'] == 'File successfully uploaded') {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
-                      child: ReportScreen(),
-                    ),
-                  );
-                  // Lakukan sesuatu jika file berhasil di-upload
-                } else {
-                  AwesomeDialog(
-                    context: context,
-                    title: "Tidak terdeteksi wajah",
-                    body: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "Mohon maaf gambar yang anda masukan tidak terdeteksi wajah di dalamnya, mohon untuk memasukkan gambar dengan benar dan sesuai termakasih",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w500),
-                        ),
+                              if (_isFrontCamera == false) {
+                                _isFlashOn = true;
+                              } else if (_isFrontCamera == true) {
+                                _isFlashOn = false;
+                              }
+                            },
+                            child: SvgPicture.asset(
+                              "Assets/Svgs/camera_reverse.svg",
+                            ),
+                          ),
+                          GestureDetector(
+                              onTap: () async {
+                                final directory =
+                                    await getExternalStorageDirectory();
+                                filePath = path.join(
+                                  directory!.path,
+                                  '${DateTime.now()}.png',
+                                );
+                                XFile picture = await _controller.takePicture();
+                                picture.saveTo(filePath!);
+
+                                print("filepath : " + filePath!);
+
+                                AwesomeDialog(
+                                  context: context,
+                                  title: "Gambar tersimpan",
+                                  desc:
+                                      "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
+                                  dialogType: DialogType.success,
+                                  animType: AnimType.bottomSlide,
+                                  btnOkOnPress: () {},
+                                  body: Container(
+                                    child: Column(
+                                      children: [
+                                        Image.file(
+                                          File(filePath!),
+                                          width: 230,
+                                          height: 250,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Text(
+                                            "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )..show();
+                              },
+                              child: SvgPicture.asset(
+                                  "Assets/Svgs/camera_take.svg")),
+                          GestureDetector(
+                            onTap: () {
+                              // fungsi ketika gambar ditekan
+                              _toggleFlash();
+                            },
+                            child: SvgPicture.asset(
+                              _isFlashOn
+                                  ? "Assets/Svgs/flash_off.svg"
+                                  : "Assets/Svgs/flash_on.svg",
+                            ),
+                          ),
+                          SizedBox(width: 45),
+                        ],
                       ),
                     ),
-                    dialogType: DialogType.error,
-                    animType: AnimType.bottomSlide,
-                    btnOkColor: Colors.red,
-                    btnOkText: "Kembali",
-                    btnOkOnPress: () {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                    },
-                  )..show();
+                  ],
+                )),
+            SizedBox(height: 15),
+            CustomButton(
+              onTap: () async {
+                setState(() {
+                  _isLoading = true;
+                });
+
+                final response = await _sendImage(filePath!);
+                if (response.statusCode == 200) {
+                  final jsonResponse = json.decode(response.body);
+                  print("response: " + jsonResponse.toString());
+                  if (jsonResponse['message'] == 'File successfully uploaded') {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeftWithFade,
+                        child: ReportScreen(),
+                      ),
+                    );
+                    // Lakukan sesuatu jika file berhasil di-upload
+                  } else {
+                    AwesomeDialog(
+                      context: context,
+                      title: "Tidak terdeteksi wajah",
+                      body: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Mohon maaf gambar yang anda masukan tidak terdeteksi wajah di dalamnya, mohon untuk memasukkan gambar dengan benar dan sesuai termakasih",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      dialogType: DialogType.error,
+                      animType: AnimType.bottomSlide,
+                      btnOkColor: Colors.red,
+                      btnOkText: "Kembali",
+                      btnOkOnPress: () {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      },
+                    )..show();
+                  }
+                } else {
+                  // Handle error uploading image to server
+                  print('Failed to upload image: ${response}');
                 }
-              } else {
-                // Handle error uploading image to server
-                print('Failed to upload image: ${response}');
-              }
-            },
-            text: "Deteksi",
-            imageAsset: "Assets/Icons/face-recognition.png",
-            width: 40,
-            height: 40,
-          ),
-          SizedBox(height: 10),
-          Spacer(),
-          Container(
-            height: 70,
-            alignment: Alignment.bottomLeft,
-            child: SvgPicture.asset(
-              "Assets/Svgs/hiasan_bawah.svg",
+              },
+              text: "Deteksi",
+              imageAsset: "Assets/Icons/face-recognition.png",
+              width: 40,
+              height: 40,
             ),
-          ),
-        ]),
-      ),
-      LoadingOverlay(isLoading: _isLoading)
-    ]));
+            SizedBox(height: 10),
+            Spacer(),
+            Container(
+              height: 70,
+              alignment: Alignment.bottomLeft,
+              child: SvgPicture.asset(
+                "Assets/Svgs/hiasan_bawah.svg",
+              ),
+            ),
+          ]),
+        ),
+        LoadingOverlay(isLoading: _isLoading)
+      ]),
+    ));
   }
 }

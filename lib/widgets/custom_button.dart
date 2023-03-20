@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
     return InkWell(
       onTap: this.onTap,
       child: Container(
-        height: 75,
+        height: 55,
         width: 325,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
             Text(
               this.text,
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 24,
                 fontFamily: 'Urbanist',
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

@@ -27,12 +27,15 @@ class SplashScreen extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 30),
-                  child: Image.asset(
-                    "Assets/Images/icon_splash.gif",
-                    width: 170,
-                    height: 170,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      "Assets/Images/icon_splash.gif",
+                      width: 170,
+                      height: 170,
 
-                    // fit: BoxFit.fill,
+                      // fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),

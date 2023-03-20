@@ -30,6 +30,7 @@ class _ImageSlideState extends State<ImageSlide> {
         child: CarouselSlider(
           items: imageList.map((image) {
             return Container(
+              color: Colors.black,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
@@ -77,12 +78,14 @@ class _ImageSlideState extends State<ImageSlide> {
         children: imageList.asMap().entries.map((entry) {
           int index = entry.key;
           String image = entry.value;
-          return Container(
-            width: 10,
+          return AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            width: _currentIndex == index ? 25 : 10,
             height: 10,
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              shape: BoxShape.rectangle,
               color: _currentIndex == index ? Colors.black : Colors.grey,
             ),
           );
