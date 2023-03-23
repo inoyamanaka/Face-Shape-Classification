@@ -131,7 +131,7 @@ class _MenuModeState extends State<MenuMode> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
+                      type: PageTransitionType.leftToRightWithFade,
                       child: UploadDataScreen(),
                     ),
                   );
@@ -140,7 +140,7 @@ class _MenuModeState extends State<MenuMode> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
+                      type: PageTransitionType.leftToRightWithFade,
                       child: MainMenu(),
                     ),
                   );

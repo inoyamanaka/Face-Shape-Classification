@@ -111,7 +111,7 @@ class _MainMenuState extends State<MainMenu> {
                         Navigator.push(
                           context,
                           PageTransition(
-                            type: PageTransitionType.rightToLeftWithFade,
+                            type: PageTransitionType.leftToRightWithFade,
                             child: ReportScreen(),
                           ),
                         );
@@ -204,7 +204,7 @@ class _MainMenuState extends State<MainMenu> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
+                      type: PageTransitionType.leftToRightWithFade,
                       child: PanduanScreen(),
                     ),
                   );

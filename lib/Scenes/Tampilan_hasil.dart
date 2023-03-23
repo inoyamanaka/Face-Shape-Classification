@@ -43,15 +43,6 @@ class _ReportScreenState extends State<ReportScreen> {
 
   int _currentIndex = 0;
 
-  Future<File> downloadFile(String url, String fileName) async {
-    var response = await http.get(Uri.parse(url));
-    var bytes = response.bodyBytes;
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = File('$dir/$fileName');
-    await file.writeAsBytes(bytes);
-    return file;
-  }
-
   Future<void> fetchImages() async {
     final response = await http.get(Uri.parse('${ApiUrl.Url}/get_images'));
     if (response.statusCode == 200) {
@@ -233,7 +224,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 15,
                     ),
                     Container(
-                      height: 250,
+                      height: height * 0.3,
                       width: 300,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
@@ -261,12 +252,26 @@ class _ReportScreenState extends State<ReportScreen> {
                                   horizontal: 12, vertical: 33),
                               child: Container(
                                 width: 150,
-                                child: Text(
-                                  "Berdasarkan hasil deteksi bentuk wajah yang anda miliki adalah bentuk wajah jenis $_bentuk_wajah",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w300),
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        fontSize: 16.0, color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                          text:
+                                              'Berdasarkan hasil deteksi bentuk wajah yang anda miliki adalah bentuk wajah jenis ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w300)),
+                                      TextSpan(
+                                          text: '$_bentuk_wajah',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -276,6 +281,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             CircularPercentIndicator(
                               radius: 50.0,
                               lineWidth: 12.0,
+
                               percent: (_persentase /
                                   100), // nilai progress saat ini (dalam bentuk desimal)
                               center: Text("$_persentase%"), // teks persentase
@@ -310,11 +316,12 @@ class _ReportScreenState extends State<ReportScreen> {
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w700),
                         ),
-                        SizedBox(
+                        Container(
                             height: 250,
                             width: 280,
                             child: ListView.builder(
                               itemCount: Oval.length,
+                              scrollDirection: Axis.vertical,
                               itemBuilder: (BuildContext context, int index) {
                                 return Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,

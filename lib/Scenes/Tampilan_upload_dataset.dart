@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:face_shape/Datas/url_host.dart';
 import 'package:face_shape/Scenes/Tampilan_mode.dart';
 import 'package:face_shape/Scenes/Tampilan_preprocessing.dart';
@@ -55,6 +56,15 @@ class _UploadDataScreenState extends State<UploadDataScreen>
         setState(() {
           loadingController.value = progressPercent;
           print(progressPercent);
+          if (loadingController.value == 1.0) {
+            AwesomeDialog(
+              context: context,
+              title: 'Upload selesai',
+              desc: 'File $filename berhasil diunggah',
+              dialogType: DialogType.success,
+              btnOkOnPress: () {},
+            )..show();
+          }
         });
 
         // Mengatur nilai progress item yang sedang diunggah
@@ -289,63 +299,6 @@ class _UploadDataScreenState extends State<UploadDataScreen>
                           ),
                         ),
                         SizedBox(height: 10),
-                        // Center(
-                        //     child: InkWell(
-                        //   onTap: () {
-                        //     _pickFile();
-                        //   },
-                        //   child: Container(
-                        //     width: width * 0.9,
-                        //     height: 155,
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(20),
-                        //       border: Border.all(
-                        //         color: Colors.black,
-                        //         width: 2,
-                        //       ),
-                        //     ),
-                        //     child: Stack(
-                        //       children: [
-                        //         ClipRRect(
-                        //           borderRadius: BorderRadius.circular(20),
-                        //           child: Image.asset(
-                        //             "Assets/Images/data_upload.jpg",
-                        //             width: width * 0.9,
-                        //             fit: BoxFit.fill,
-                        //             color: Colors.black26,
-                        //             colorBlendMode: BlendMode.darken,
-                        //           ),
-                        //         ),
-                        //         Center(
-                        //           child: Container(
-                        //             width: 150,
-                        //             height: 40,
-                        //             decoration: BoxDecoration(
-                        //               color: Color.fromARGB(255, 19, 21, 34),
-                        //               borderRadius: BorderRadius.circular(20),
-                        //               border: Border.all(
-                        //                 color: Colors.black,
-                        //                 width: 3,
-                        //               ),
-                        //             ),
-                        //             child: Center(
-                        //               child: Text(
-                        //                 "Upload Dataset",
-                        //                 style: TextStyle(
-                        //                   color: Colors.white,
-                        //                   fontSize: 16,
-                        //                   fontFamily: 'Urbanist',
-                        //                   fontWeight: FontWeight.w700,
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // )),
-                        SizedBox(height: 10),
                         InkWell(
                           onTap: () {
                             _pickFile();
@@ -358,7 +311,7 @@ class _UploadDataScreenState extends State<UploadDataScreen>
                                 radius: Radius.circular(10),
                                 dashPattern: [10, 4],
                                 strokeCap: StrokeCap.round,
-                                color: Colors.blue.shade400,
+                                color: Color.fromARGB(255, 19, 21, 34),
                                 child: Container(
                                   width: double.infinity,
                                   height: 100,
@@ -371,7 +324,7 @@ class _UploadDataScreenState extends State<UploadDataScreen>
                                     children: [
                                       Icon(
                                         Iconsax.folder_open,
-                                        color: Colors.blue,
+                                        color: Color.fromARGB(255, 19, 21, 34),
                                         size: 40,
                                       ),
                                       SizedBox(

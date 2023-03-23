@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
+import 'package:face_shape/Scenes/Tampilan_mode.dart';
+import 'package:face_shape/widgets/custom_backbtn.dart';
 import 'package:face_shape/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,11 +40,18 @@ class _PanduanScreenState extends State<PanduanScreen> {
         child: Container(
           child: Column(children: [
             Container(
-              alignment: Alignment.topRight,
-              child: SvgPicture.asset(
-                "Assets/Svgs/hiasan_atas.svg",
-              ),
-            ),
+                alignment: Alignment.topRight,
+                child: CustomBackButton(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeftWithFade,
+                        child: MainMenu(),
+                      ),
+                    );
+                  },
+                )),
             SizedBox(
               height: 15,
             ),
@@ -142,23 +151,12 @@ class _PanduanScreenState extends State<PanduanScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            CustomButton(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    type: PageTransitionType.rightToLeftWithFade,
-                    child: MainMenu(),
-                  ),
-                );
-              },
-              text: "main menu",
-              imageAsset: "Assets/Icons/main-menu.png",
-              width: 40,
-              height: 40,
+            Spacer(),
+            Container(
+              alignment: Alignment.bottomLeft,
+              child: SvgPicture.asset(
+                "Assets/Svgs/hiasan_bawah.svg",
+              ),
             ),
           ]),
         ),

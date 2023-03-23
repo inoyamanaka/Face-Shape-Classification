@@ -1,5 +1,5 @@
-import 'package:face_shape/Scenes/Tampilan_model_result.dart';
 import 'package:face_shape/Scenes/Tampilan_upload_dataset.dart';
+import 'package:face_shape/Scenes/Tampilan_verification.dart';
 import 'package:face_shape/widgets/custom_backbtn.dart';
 import 'package:face_shape/widgets/custom_header_2.dart';
 import 'package:face_shape/widgets/custom_media2.dart';
@@ -87,21 +87,6 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
                                 Container(
                                   child: Column(
                                     children: [
-                                      CustomHeader2(isi: "Face Cropping"),
-                                      SizedBox(height: 15),
-                                      FaceCroppingCard(
-                                          deskripsi:
-                                              "Face cropping merupakan proses melakukan cropp pada area yang ada di sekitar wajah saja sehingga bagian lain akan dilakukan crop atau dihilangkan",
-                                          gambar:
-                                              "Assets/Images/face_cropping.png",
-                                          tahap: "face_cropping"),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Container(
-                                  child: Column(
-                                    children: [
                                       CustomHeader2(isi: "Facial Landmark"),
                                       SizedBox(height: 10),
                                       FaceCroppingCard(
@@ -165,14 +150,12 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
                       context,
                       PageTransition(
                         type: PageTransitionType.rightToLeftWithFade,
-                        child: ModelResultScreen(),
+                        child: VerifScreen(),
                       ),
                     );
                   },
                 ),
-                SizedBox(
-                  height: 5,
-                ),
+                SizedBox(height: 5),
               ]),
         ),
       ),
