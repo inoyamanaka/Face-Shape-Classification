@@ -205,7 +205,7 @@ class _MainMenuState extends State<MainMenu> {
                     context,
                     PageTransition(
                       type: PageTransitionType.leftToRightWithFade,
-                      child: PanduanScreen(),
+                      child: ReportScreen(),
                     ),
                   );
                 },
@@ -223,7 +223,8 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ]),
           ),
-          LoadingOverlay(isLoading: _isLoading)
+          LoadingOverlay(
+              text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
         ]),
       ),
     );

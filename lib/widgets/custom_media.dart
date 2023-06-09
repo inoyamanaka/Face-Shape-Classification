@@ -55,6 +55,7 @@ class CostumMedia extends StatelessWidget {
                   child: Text(
                     this.text,
                     style: TextStyle(
+                      color: Colors.white,
                       fontSize: 16,
                       fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w700,

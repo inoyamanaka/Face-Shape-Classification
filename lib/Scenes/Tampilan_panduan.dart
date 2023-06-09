@@ -1,8 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
-import 'package:face_shape/Scenes/Tampilan_mode.dart';
 import 'package:face_shape/widgets/custom_backbtn.dart';
-import 'package:face_shape/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -121,7 +119,7 @@ class _PanduanScreenState extends State<PanduanScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: imageList.asMap().entries.map((entry) {
                 int index = entry.key;
-                String image = entry.value;
+                // String image = entry.value;
                 return Container(
                   width: 10,
                   height: 10,

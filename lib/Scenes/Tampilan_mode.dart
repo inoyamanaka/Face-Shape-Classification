@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Scenes/Tampilan_menu.dart';
+import 'package:face_shape/Scenes/Tampilan_model_result.dart';
+import 'package:face_shape/Scenes/Tampilan_select_model.dart';
 import 'package:face_shape/Scenes/Tampilan_upload_dataset.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,60 +126,121 @@ class _MenuModeState extends State<MenuMode> {
                       fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w500)),
             ),
-            InkWell(
-              onTap: () {
-                if (_currentIndex == 0) {
-                  // pindah page
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.leftToRightWithFade,
-                      child: UploadDataScreen(),
-                    ),
-                  );
-                } else if (_currentIndex == 1) {
-                  // pindah page
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.leftToRightWithFade,
-                      child: MainMenu(),
-                    ),
-                  );
-                }
-              },
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 500),
-                height: 75,
-                width: 325,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: _currentIndex == 1
-                      ? Color.fromARGB(255, 212, 245, 252)
-                      : Color.fromARGB(255, 19, 21, 34),
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2.0,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      mode[_currentIndex],
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: 'Urbanist',
-                        color: _currentIndex == 1
-                            ? Color.fromARGB(255, 19, 21, 34)
-                            : Color.fromARGB(255, 212, 245, 252),
-                        fontWeight: FontWeight.w700,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    if (_currentIndex == 0) {
+                      // pindah page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.leftToRightWithFade,
+                          child: UploadDataScreen(),
+                        ),
+                      );
+                    } else if (_currentIndex == 1) {
+                      // pindah page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.leftToRightWithFade,
+                          child: MainMenu(),
+                        ),
+                      );
+                    }
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    height: 75,
+                    width: 250,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: _currentIndex == 1
+                          ? Color.fromARGB(255, 212, 245, 252)
+                          : Color.fromARGB(255, 19, 21, 34),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
                       ),
                     ),
-                  ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          mode[_currentIndex],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Urbanist',
+                            color: _currentIndex == 1
+                                ? Color.fromARGB(255, 19, 21, 34)
+                                : Color.fromARGB(255, 212, 245, 252),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    if (_currentIndex == 0) {
+                      // pindah page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.leftToRightWithFade,
+                          child: SelectModelScreen(),
+                        ),
+                      );
+                    } else if (_currentIndex == 1) {
+                      // pindah page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.leftToRightWithFade,
+                          child: SelectModelScreen(),
+                        ),
+                      );
+                    }
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    height: 75,
+                    width: 75,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: _currentIndex == 1
+                          ? Color.fromARGB(255, 212, 245, 252)
+                          : Color.fromARGB(255, 19, 21, 34),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            _currentIndex == 0
+                                ? "Assets/Icons/user(1).png"
+                                : "Assets/Icons/user(2).png",
+                            width: 45,
+                            height: 45,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),

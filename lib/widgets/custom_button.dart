@@ -1,3 +1,4 @@
+import 'package:face_shape/Datas/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -24,8 +25,8 @@ class CustomButton extends StatelessWidget {
         width: 325,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(45),
-          color: Color.fromARGB(255, 80, 101, 252),
+          borderRadius: BorderRadius.circular(10),
+          color: PrimColor.primary2,
           border: Border.all(
             color: Colors.black,
             width: 2.0,
@@ -39,13 +40,13 @@ class CustomButton extends StatelessWidget {
             ),
             Image.asset(
               this.imageAsset,
-              width: width,
-              height: height,
+              width: width * 0.8,
+              height: height * 0.7,
             ),
             Text(
               this.text,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontFamily: 'Urbanist',
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

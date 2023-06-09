@@ -26,7 +26,7 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
     double width = MediaQuery.of(context).size.width;
     return Center(
       child: Container(
-        height: 350,
+        height: 280,
         width: width * 0.8,
         decoration: BoxDecoration(
             border: Border.all(width: 1),
@@ -34,7 +34,7 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-            height: 120,
+            height: 140,
             width: width * 0.8,
             child: Center(
               child: Padding(
@@ -50,16 +50,16 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
             height: 5,
           ),
           Container(
-            height: 140,
+            height: 100,
             width: width * 0.8,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 widget.deskripsi,
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Color.fromARGB(255, 19, 21, 34),
-                    fontSize: 15,
+                    fontSize: 12,
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w700),
               ),
@@ -68,43 +68,6 @@ class _FaceCroppingCardState extends State<FaceCroppingCard> {
           SizedBox(
             height: 5,
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 30,
-                width: 75,
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1),
-                    color: Color.fromARGB(255, 217, 217, 217),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Switch(
-                  value: _switchValue,
-                  onChanged: (bool value) async {
-                    setState(() {
-                      if (_switchValue == false) {
-                        _switchValue = true;
-                      } else if (_switchValue == true) {
-                        _switchValue = false;
-                      }
-
-                      // Mengirim status switch ke server Flask Python
-                    });
-                    final response = await http.post(
-                      Uri.parse('${ApiUrl.Url}/${widget.tahap}'),
-                      body: {'status': _switchValue.toString()},
-                    );
-                  },
-                  activeColor: Colors.green,
-                  inactiveTrackColor: Colors.red,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          )
         ]),
       ),
     );

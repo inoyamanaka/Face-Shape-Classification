@@ -6,13 +6,15 @@ class HasilAkurasiCard extends StatelessWidget {
   final String judul;
   final String mode;
   final int _persentase;
+  final int data;
 
-  HasilAkurasiCard(this._bentuk_wajah, this.judul, this.mode, this._persentase);
+  HasilAkurasiCard(
+      this._bentuk_wajah, this.judul, this.mode, this._persentase, this.data);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
+      height: 250,
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -45,7 +47,7 @@ class HasilAkurasiCard extends StatelessWidget {
                 child: Container(
                   width: 150,
                   child: Text(
-                    "Anda mendapatkan akurasi pada data $mode sebesar $_persentase% dari jumlah data Y $_persentase",
+                    "Anda mendapatkan akurasi pada data $mode sebesar $_persentase% dari jumlah data $data",
                     style: TextStyle(
                         fontSize: 16,
                         fontFamily: 'Urbanist',

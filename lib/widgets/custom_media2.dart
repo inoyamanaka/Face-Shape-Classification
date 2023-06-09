@@ -17,12 +17,13 @@ class CustomButton2 extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: this.onTap,
-        child: Container(
-          height: 75,
-          width: width * 0.9,
+        child: AnimatedContainer(
+          duration: Duration(seconds: 2),
+          height: 55,
+          width: 325,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             color: Color.fromARGB(255, 19, 21, 34),
             border: Border.all(
               color: Colors.black,
@@ -30,20 +31,20 @@ class CustomButton2 extends StatelessWidget {
             ),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // Image.asset(
+              //   "Assets/Icons/next.png",
+              //   width: 30,
+              //   height: 30,
+              // ),
               SizedBox(
                 width: 5,
-              ),
-              Image.asset(
-                "Assets/Icons/next.png",
-                width: 45,
-                height: 45,
               ),
               Text(
                 this.isi,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 20,
                   fontFamily: 'Urbanist',
                   color: Colors.white,
                   fontWeight: FontWeight.w700,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class LoadingOverlay extends StatelessWidget {
+class LoadingOverlay2 extends StatelessWidget {
   final bool isLoading;
   final String text;
+  final String name;
 
-  const LoadingOverlay({Key? key, required this.text, required this.isLoading})
+  const LoadingOverlay2(
+      {Key? key,
+      required this.text,
+      required this.isLoading,
+      required this.name})
       : super(key: key);
 
   @override
@@ -25,7 +30,7 @@ class LoadingOverlay extends StatelessWidget {
           ),
           Center(
             child: Container(
-              width: 230,
+              width: 250,
               height: 180,
               decoration: BoxDecoration(
                 color: Colors.grey,
@@ -42,13 +47,17 @@ class LoadingOverlay extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    this.text,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w300),
+                  Container(
+                    width: 220,
+                    child: Text(
+                      this.text,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w300),
+                    ),
                   )
                 ],
               ),
