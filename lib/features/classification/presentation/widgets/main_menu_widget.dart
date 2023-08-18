@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/main_menu_att.dart';
+import '../../../../core/models/main_menu_att.dart';
 
 class MainMenuWidget extends StatelessWidget {
   const MainMenuWidget({super.key});

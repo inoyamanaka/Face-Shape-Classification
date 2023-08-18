@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final MyColors color = MyColors();
     return InkWell(
-      onTap: this.onTap,
+      onTap: onTap,
       child: Container(
         height: 55,
         width: 325,
@@ -36,24 +36,24 @@ class CustomButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Image.asset(
-              this.imageAsset,
+              imageAsset,
               width: width * 0.8,
               height: height * 0.7,
             ),
             Text(
-              this.text,
-              style: TextStyle(
+              text,
+              style: const TextStyle(
                 fontSize: 20,
                 fontFamily: 'Urbanist',
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 50,
             )
           ],

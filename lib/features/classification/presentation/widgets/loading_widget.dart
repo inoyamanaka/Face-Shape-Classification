@@ -14,11 +14,11 @@ class LoadingPageWidget extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               // borderRadius: BorderRadius.circular(10.0), // set border rounder
               color: Colors.black,
             ),
-            child: ModalBarrier(
+            child: const ModalBarrier(
               dismissible: false,
               color: Colors.transparent,
             ),
@@ -31,7 +31,7 @@ class LoadingPageWidget extends StatelessWidget {
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitSquareCircle(

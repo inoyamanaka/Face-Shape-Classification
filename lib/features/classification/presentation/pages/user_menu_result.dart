@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Datas/url_host.dart';
-import 'package:face_shape/Scenes/Tampilan_ambil_gambar.dart';
-import 'package:face_shape/Scenes/Tampilan_menu.dart';
-import 'package:face_shape/features/classification/data/models/ciri_wajah.dart';
-import 'package:face_shape/features/classification/presentation/pages/user_menu_camera.dart';
-import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
+import 'package:face_shape/core/models/ciri_wajah.dart';
+import 'package:face_shape/core/router/routes.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:face_shape/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:get/route_manager.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
@@ -31,7 +28,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   double pageOffset = 0;
   double _persentase = 0;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   final List<String> imageDes = [
     "Original Image",
@@ -78,19 +75,18 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double height = size.height;
-    final double width = size.width;
+
     final ciriWajah = CiriWajah();
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => CameraScreen()));
+          Get.toNamed(Routes.userCamera);
           return false;
         },
         child: Stack(children: [
           Column(
             children: [
-              Container(
+              SizedBox(
                 height: height,
                 child: SingleChildScrollView(
                   child: Column(children: [
@@ -98,19 +94,19 @@ class _ReportScreenState extends State<ReportScreen> {
                     const SizedBox(height: 15),
                     TitlePage(),
                     const SizedBox(height: 5),
-                    ImageResult(),
-                    SliderIndicator(),
+                    imageResult(),
+                    sliderIndicator(),
                     const SizedBox(height: 15),
-                    ImageResult2(height),
+                    imageResult2(height),
                     const SizedBox(height: 15),
-                    ImageResult3(ciriWajah),
+                    imageResult3(ciriWajah),
                     const SizedBox(height: 90)
                   ]),
                 ),
               ),
             ],
           ),
-          BackButtonUser(context),
+          backButtonUser(context),
           LoadingOverlay(
               text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
         ]),
@@ -118,7 +114,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Positioned BackButtonUser(BuildContext context) {
+  Positioned backButtonUser(BuildContext context) {
     return Positioned(
       left: 20,
       right: 20,
@@ -126,13 +122,7 @@ class _ReportScreenState extends State<ReportScreen> {
       child: CustomButton(
         onTap: () {
           deleteImgs();
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.rightToLeftWithFade,
-              child: UserMenuPage(),
-            ),
-          );
+          Get.toNamed(Routes.menu);
         },
         text: "main menu",
         imageAsset: "Assets/Icons/main-menu.png",
@@ -142,39 +132,38 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Container ImageResult3(CiriWajah ciriWajah) {
+  Container imageResult3(CiriWajah ciriWajah) {
     return Container(
       height: 355,
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color.fromARGB(255, 217, 217, 217),
+        color: const Color.fromARGB(255, 217, 217, 217),
         border: Border.all(
           color: Colors.black,
           width: 2.0,
         ),
       ),
       child: Column(children: [
-        SizedBox(height: 15),
-        Text(
+        const SizedBox(height: 15),
+        const Text(
           "Ciri dari wajah",
           style: TextStyle(
               fontSize: 18,
               fontFamily: 'Urbanist',
               fontWeight: FontWeight.w700),
         ),
-        Container(
+        SizedBox(
           height: 250,
           width: 280,
-          child: _bentuk_wajah != null &&
-                  ciriWajah.faceShapes.containsKey(_bentuk_wajah)
+          child: ciriWajah.faceShapes.containsKey(_bentuk_wajah)
               ? ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 4,
                   itemBuilder: (BuildContext context, int index) {
-                    final bentukWajah =
-                        ciriWajah.faceShapes.keys.elementAt(index);
-                    print(bentukWajah);
+                    // final bentukWajah =
+                    //     ciriWajah.faceShapes.keys.elementAt(index);
+                    // print(bentukWajah);
                     final deskripsiWajah = ciriWajah.faceShapes[_bentuk_wajah]!;
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +174,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             child: RichText(
                               text: TextSpan(
                                 text: "• ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
@@ -193,7 +182,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                 children: [
                                   TextSpan(
                                       text: deskripsiWajah[index],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,
                                           fontFamily: 'Urbanist',
@@ -213,33 +202,33 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Container ImageResult2(double height) {
+  Container imageResult2(double height) {
     return Container(
       height: height * 0.3,
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color.fromARGB(255, 217, 217, 217),
+        color: const Color.fromARGB(255, 217, 217, 217),
         border: Border.all(
           color: Colors.black,
           width: 2.0,
         ),
       ),
       child: Column(children: [
-        SizedBox(height: 15),
-        SubTitleLaporan(),
+        const SizedBox(height: 15),
+        subTitleLaporan(),
         Row(
           children: [
-            FaceShapeResult(),
-            SizedBox(width: 5),
-            FaceShapePercent(),
+            faceShapeResult(),
+            const SizedBox(width: 5),
+            faceShapePercent(),
           ],
         ),
       ]),
     );
   }
 
-  CircularPercentIndicator FaceShapePercent() {
+  CircularPercentIndicator faceShapePercent() {
     return CircularPercentIndicator(
       radius: 50.0,
       lineWidth: 12.0,
@@ -247,20 +236,20 @@ class _ReportScreenState extends State<ReportScreen> {
       percent:
           (_persentase / 100), // nilai progress saat ini (dalam bentuk desimal)
       center: Text("$_persentase%"), // teks persentase
-      progressColor: Color.fromARGB(255, 80, 101, 252),
+      progressColor: const Color.fromARGB(255, 80, 101, 252),
     );
   }
 
-  Padding FaceShapeResult() {
+  Padding faceShapeResult() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 33),
-      child: Container(
+      child: SizedBox(
         width: 150,
         child: RichText(
           text: TextSpan(
-            style: TextStyle(fontSize: 16.0, color: Colors.black),
+            style: const TextStyle(fontSize: 16.0, color: Colors.black),
             children: [
-              TextSpan(
+              const TextSpan(
                   text:
                       'Berdasarkan hasil deteksi bentuk wajah yang anda miliki adalah bentuk wajah jenis ',
                   style: TextStyle(
@@ -270,7 +259,8 @@ class _ReportScreenState extends State<ReportScreen> {
                       fontWeight: FontWeight.w300)),
               TextSpan(
                   text: '$_bentuk_wajah',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
             ],
           ),
         ),
@@ -278,16 +268,16 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Text SubTitleLaporan() {
-    return Text(
+  Text subTitleLaporan() {
+    return const Text(
       "Laporan hasil deteksi",
       style: TextStyle(
           fontSize: 18, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
     );
   }
 
-  Container ImageResult() {
-    return Container(
+  SizedBox imageResult() {
+    return SizedBox(
       // atur lebar, tinggi, dan warna latar belakang container sesuai kebutuhan
       width: 300,
       height: 330,
@@ -297,13 +287,13 @@ class _ReportScreenState extends State<ReportScreen> {
             "Assets/Svgs/report_design.svg",
           ),
         ),
-        ImagePreprocessBox(),
-        ImagePreprocessDetail()
+        imagePreprocessBox(),
+        imagePreprocessDetail()
       ]),
     );
   }
 
-  Row SliderIndicator() {
+  Row sliderIndicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: _imageUrls.asMap().entries.map((entry) {
@@ -323,7 +313,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Positioned ImagePreprocessDetail() {
+  Positioned imagePreprocessDetail() {
     return Positioned(
       bottom: 0,
       left: 12,
@@ -332,9 +322,9 @@ class _ReportScreenState extends State<ReportScreen> {
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-              padding: EdgeInsets.only(bottom: 30),
+              padding: const EdgeInsets.only(bottom: 30),
               child: Text(imageDes[_currentIndex],
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 16,
                       color: Colors.white,
                       fontFamily: 'Urbanist',
@@ -342,7 +332,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Positioned ImagePreprocessBox() {
+  Positioned imagePreprocessBox() {
     return Positioned(
       bottom: 70,
       left: 12,

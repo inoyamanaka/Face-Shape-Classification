@@ -1,10 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
 class ApiUrl {
   // static const Url = "http://192.168.100.243:8080";
 
-  static const Url = "https://0d4f-119-2-52-182.ngrok-free.app";
+  static const Url = "https://11a2-116-254-119-237.ngrok-free.app";
 
   // static const Url = "https://yamanaka1.pagekite.me";
-
   static const Url_pred = "${ApiUrl.Url}/upload";
   static const Url_total_models = "${ApiUrl.Url}/count_models";
   static const Url_selected_models = "${ApiUrl.Url}/selected_models";

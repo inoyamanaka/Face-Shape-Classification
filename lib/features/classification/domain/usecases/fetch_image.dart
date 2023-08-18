@@ -1,11 +1,16 @@
-import 'package:face_shape/features/classification/data/repositories/fetch_image_repositories_impl.dart';
-import 'package:face_shape/features/classification/domain/entities/user_image.dart';
+import 'package:dartz/dartz.dart';
+import 'package:face_shape/core/error/failures.dart';
+import 'package:face_shape/core/models/usecase/usecase.dart';
 import 'package:face_shape/features/classification/domain/repositories/fetch_image_repositories.dart';
 
-class FetchImage {
-  FetchImageRepository fetchImageRepository = FetchImageRepositoryImpl();
+class GetImageUsecase extends UseCase {
+  final GetImageRepository _repository;
 
-  Future<UserImage> call(String filepath) async {
-    return await fetchImageRepository.fetchUserImageAtt();
+  GetImageUsecase(this._repository);
+
+  @override
+  Future<Either<Failure, dynamic>> call(params) {
+    // TODO: implement call
+    return _repository.getImageAtt(params);
   }
 }

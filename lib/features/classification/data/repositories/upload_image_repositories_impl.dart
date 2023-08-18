@@ -1,41 +1,39 @@
-import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
-import 'package:face_shape/config/config_url.dart';
-import 'package:face_shape/core/models/error/failures.dart';
+import 'package:dio/dio.dart';
+import 'package:face_shape/core/error/failures.dart';
+import 'package:face_shape/features/classification/data/data_sources/classification_datasource_request.dart';
 import 'package:face_shape/features/classification/domain/entities/user_image.dart';
 import 'package:face_shape/features/classification/domain/repositories/upload_image_repositories.dart';
-import 'package:http/http.dart' as http;
 
+class UploadImageRepositoryImpl extends UploadImageRepository {
+  final ReqClassificationRemoteDataSource datasource;
 
-class UploadImageRepositoryImpl implements UploadImageRepository {
+  UploadImageRepositoryImpl(this.datasource);
   @override
-  Future<Either<Failure, ImageEntitiy>> uploadImage(String filePath) async {
+  Future<Either<Failure, ImageEntity>> uploadImage(String filePath) async {
+    try {
+      final remoteGetImage = await datasource.uploadImage(filePath);
 
-try{
-
-}except(e){}
-
-
-
-    // print("ini terpanggil ?");
-    final url = Uri.parse('${ApiUrl.Url_pred}');
-
-    final request = http.MultipartRequest('POST', url)
-      ..files.add(await http.MultipartFile.fromPath('file', filePath));
-    final client = http.Client();
-    final response = await client
-        .send(request)
-        .then((response) => http.Response.fromStream(response));
-
-    // print(response.statusCode);
-    if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      print("response: " + jsonResponse.toString());
-      if (jsonResponse['message'] == 'File successfully uploaded') {
-        return true;
+      return Right(remoteGetImage);
+    } on DioException catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        log('${e.response!.data}');
+        log('${e.response!.headers}');
+        return Left(
+          ServerFailure.fromJson(e.response!.data as Map<String, dynamic>),
+        );
+      } else {
+        // Something happened in setting up or sending the request
+        //that triggered an Error
+        log(e.message!);
+        return Left(ServerFailure(e.message!));
       }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
-
-    return false;
   }
 }

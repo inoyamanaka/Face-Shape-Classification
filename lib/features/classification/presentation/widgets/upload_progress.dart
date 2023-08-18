@@ -38,7 +38,6 @@ AwesomeDialog SuccesUpload(BuildContext context) {
       );
     },
   )..show();
-  ;
 }
 
 AwesomeDialog uploadSuccessImage(BuildContext context, String? filePath) {

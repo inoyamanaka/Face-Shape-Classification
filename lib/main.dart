@@ -1,6 +1,8 @@
+import 'package:face_shape/core/router/navigation.dart';
+import 'package:face_shape/core/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'features/classification/presentation/pages/splash_page.dart';
+import 'package:get/get.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +15,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        home: SplashScreen());
+        initialRoute: Routes.menu,
+        getPages: Nav.routes);
   }
 }

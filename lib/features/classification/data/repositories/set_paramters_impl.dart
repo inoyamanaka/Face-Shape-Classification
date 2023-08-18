@@ -1,6 +1,5 @@
 import 'package:face_shape/config/config_url.dart';
 import 'package:face_shape/features/classification/domain/repositories/set_parameters.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SetparamsImpl implements SetParams {

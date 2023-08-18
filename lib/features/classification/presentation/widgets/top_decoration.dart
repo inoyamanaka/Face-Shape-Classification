@@ -17,7 +17,7 @@ class CustomBackButton extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(10),
           child: InkWell(
-            onTap: this.onTap,
+            onTap: onTap,
             child: Image.asset(
               "Assets/Icons/back.png",
               width: 35,
