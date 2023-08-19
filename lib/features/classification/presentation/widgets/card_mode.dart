@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CardMode extends StatelessWidget {
   final String image;
@@ -18,7 +19,7 @@ class CardMode extends StatelessWidget {
         borderRadius: BorderRadius.circular(40.0),
         child: Image.asset(
           image,
-          width: 250,
+          width: 250.w,
           fit: BoxFit.cover,
         ),
       ),

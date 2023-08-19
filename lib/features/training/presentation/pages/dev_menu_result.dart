@@ -8,7 +8,7 @@ import 'package:face_shape/widgets/costum_header.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:face_shape/widgets/custom_header_2.dart';
 import 'package:face_shape/widgets/custom_image_slide.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';

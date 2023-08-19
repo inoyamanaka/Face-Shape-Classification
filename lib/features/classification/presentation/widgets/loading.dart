@@ -1,4 +1,6 @@
+import 'package:face_shape/config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingOverlay extends StatelessWidget {
@@ -15,10 +17,10 @@ class LoadingOverlay extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.black,
             ),
-            child: ModalBarrier(
+            child: const ModalBarrier(
               dismissible: false,
               color: Colors.transparent,
             ),
@@ -36,17 +38,15 @@ class LoadingOverlay extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SpinKitSquareCircle(
-                    color: Color.fromARGB(255, 80, 101, 252),
-                    size: 50.0,
+                    color: MyColors().primary,
+                    size: 50.w,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20.h),
                   Text(
-                    this.text,
+                    text,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w300),
                   )

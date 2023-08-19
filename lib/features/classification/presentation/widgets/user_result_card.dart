@@ -1,4 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:face_shape/config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ResultCard extends StatelessWidget {
@@ -16,47 +20,47 @@ class ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       const SizedBox(height: 15),
-      const Text(
+      Text(
         "Laporan hasil deteksi",
         style: TextStyle(
-            fontSize: 18, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
+            fontSize: 18.sp,
+            fontFamily: 'Urbanist',
+            fontWeight: FontWeight.w700),
       ),
       Row(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 33),
             child: SizedBox(
-              width: 150,
+              width: 150.w,
               child: RichText(
                 text: TextSpan(
-                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                  style: TextStyle(fontSize: 16.sp, color: Colors.black),
                   children: [
-                    const TextSpan(
+                    TextSpan(
                         text:
                             'Berdasarkan hasil deteksi bentuk wajah yang anda miliki adalah bentuk wajah jenis ',
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: Colors.black,
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w300)),
                     TextSpan(
-                        text: '$_bentuk_wajah',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
+                        text: _bentuk_wajah,
+                        style: TextStyle(
+                            fontSize: 20.sp, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 5),
+          SizedBox(width: 5.w),
           CircularPercentIndicator(
             radius: 50.0,
             lineWidth: 12.0,
-
-            percent: (_persentase /
-                100), // nilai progress saat ini (dalam bentuk desimal)
-            center: Text("$_persentase%"), // teks persentase
-            progressColor: const Color.fromARGB(255, 80, 101, 252),
+            percent: (_persentase / 100),
+            center: Text("$_persentase%"),
+            progressColor: MyColors().primary,
           ),
         ],
       ),

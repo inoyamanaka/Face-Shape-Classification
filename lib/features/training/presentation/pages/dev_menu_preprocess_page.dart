@@ -6,7 +6,7 @@ import 'package:face_shape/features/training/presentation/pages/dev_menu_verific
 import 'package:face_shape/widgets/custom_header_2.dart';
 import 'package:face_shape/widgets/custom_media2.dart';
 import 'package:face_shape/widgets/cutom_deskripsi_preprocess.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:page_transition/page_transition.dart';

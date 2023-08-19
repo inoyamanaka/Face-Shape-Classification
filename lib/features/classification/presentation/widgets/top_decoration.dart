@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomBackButton extends StatelessWidget {
@@ -20,8 +21,8 @@ class CustomBackButton extends StatelessWidget {
             onTap: onTap,
             child: Image.asset(
               "Assets/Icons/back.png",
-              width: 35,
-              height: 35,
+              width: 35.w,
+              height: 35.h,
             ),
           ),
         ),

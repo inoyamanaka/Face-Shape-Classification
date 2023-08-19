@@ -7,10 +7,16 @@ import 'package:face_shape/features/classification/presentation/pages/user_menu_
 import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
 import 'package:face_shape/features/classification/presentation/pages/user_menu_result.dart';
 import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
+import 'package:face_shape/splash_page.dart';
 import 'package:get/get.dart';
 
 class Nav {
   static List<GetPage> routes = [
+    GetPage(
+      name: Routes.splash,
+      page: () => const SplashScreen(),
+      transition: Transition.cupertino,
+    ),
     GetPage(
       name: Routes.menu,
       page: () => const MenuMode(),

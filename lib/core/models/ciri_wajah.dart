@@ -25,10 +25,10 @@ class CiriWajah {
       "Bentuk wajah persegi panjang tampak lebih panjang dan sempit"
     ],
     "Triangle": [
-      "Wajah segitiga cenderung memiliki dagu yang lebih runcing dan tajam dibandingkan dengan bagian tengah wajah",
-      "Bagian dahi pada wajah segitiga umumnya lebih lebar daripada bagian dagu, memberikan kesan bentuk segitiga pada wajah",
-      "Wajah segitiga cenderung memiliki pipi yang lebih lancip, sehingga terlihat lebih tirus.",
-      "Bagian rahang pada wajah segitiga biasanya lebih ramping, sehingga memberikan kesan wajah yang segitiga"
+      "Wajah segitiga memiliki dagu yang runcing dan tajam dibandingkan bagian tengah wajah",
+      "Bagian dahi umumnya lebih lebar daripada bagian dagu",
+      "Wajah segitiga memiliki pipi yang lebih lancip, sehingga terlihat lebih tirus.",
+      "Bagian rahang lebih ramping, sehingga memberikan kesan wajah yang segitiga"
     ],
     "Round": [
       "Tipe wajah ini memiliki garis rahang yang lembut dan bulat, hampir berbentuk lingkaran",

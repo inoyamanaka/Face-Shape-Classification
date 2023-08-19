@@ -28,7 +28,7 @@ class SplashWidget extends StatelessWidget {
             ),
             Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 30),
+                padding: const EdgeInsets.only(bottom: 30),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
@@ -41,7 +41,7 @@ class SplashWidget extends StatelessWidget {
             ),
           ]),
         ),
-        nextScreen: MenuMode(),
+        nextScreen: const MenuMode(),
         splashTransition: SplashTransition.fadeTransition,
         splashIconSize: height,
       ),

@@ -16,14 +16,14 @@ AwesomeDialog noFaceDetection(BuildContext context) {
   return AwesomeDialog(
     context: context,
     title: "Tidak terdeteksi wajah",
-    body: const Padding(
-      padding: EdgeInsets.all(10),
+    body: Padding(
+      padding: EdgeInsets.all(10.w),
       child: Text(
         "Mohon maaf gambar yang anda masukan tidak terdeteksi wajah di dalamnya, mohon untuk memasukkan gambar dengan benar dan sesuai termakasih",
         textAlign: TextAlign.center,
         style: TextStyle(
             color: Colors.black,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Urbanist',
             fontWeight: FontWeight.w500),
       ),
@@ -55,7 +55,7 @@ AwesomeDialog takePictureDialog(BuildContext context, String filePath) {
         ),
         SizedBox(height: 10.h),
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10.w),
           child: Text(
             "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
             textAlign: TextAlign.center,

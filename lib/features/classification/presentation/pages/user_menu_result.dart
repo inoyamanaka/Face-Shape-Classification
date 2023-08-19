@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Datas/url_host.dart';
+import 'package:face_shape/config/config.dart';
 import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/models/ciri_wajah.dart';
 import 'package:face_shape/core/router/routes.dart';
@@ -7,8 +8,11 @@ import 'package:face_shape/features/classification/presentation/bloc/classificat
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/user_result_card.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
@@ -56,44 +60,59 @@ class _ReportScreenState extends State<ReportScreen> {
       child: Scaffold(
         body: WillPopScope(
           onWillPop: () async {
-            Get.toNamed(Routes.userCamera);
+            Get.toNamed(Routes.userMenu);
             return false;
           },
           child: BlocBuilder<ClassificationBlocGet, GetClassificationState>(
             builder: (context, state) {
-              if (state is GetClassificationLoading) {
-                return const Center(child: CircularProgressIndicator());
+              if (state is GetClassificationLoading ||
+                  state is GetClassificationInitial) {
+                return const LoadingOverlay(
+                  isLoading: true,
+                  text: "Menampilkan Hasil.......",
+                );
               }
               if (state is GetClassificationSuccess) {
-                return Stack(children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: height,
-                        child: SingleChildScrollView(
-                          child: Column(children: [
-                            TopDecoration(),
-                            const SizedBox(height: 15),
-                            const TitleApp(textTitle: "Hasil Deteksi Wajah"),
-                            const SizedBox(height: 5),
-                            imageResult(state.dataImageEntity.urls!),
-                            sliderIndicator(state.dataImageEntity.urls!),
-                            const SizedBox(height: 15),
-                            imageResult2(
-                                height,
-                                state.dataImageEntity.bentukWajah!,
-                                state.dataImageEntity.persentase!),
-                            const SizedBox(height: 15),
-                            imageResult3(
-                                ciriWajah, state.dataImageEntity.bentukWajah!),
-                            const SizedBox(height: 90)
-                          ]),
+                return ScreenUtilInit(
+                  builder: (context, child) => Stack(children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: height,
+                          child: SingleChildScrollView(
+                            child: Column(children: [
+                              topDecoration(),
+                              SizedBox(height: 15.h),
+                              const TitleApp(textTitle: "Hasil Deteksi Wajah"),
+                              SizedBox(height: 5.h),
+                              imageResult(state.dataImageEntity.urls!)
+                                  .animate()
+                                  .slideY(begin: 1, end: 0),
+                              sliderIndicator(state.dataImageEntity.urls!),
+                              SizedBox(height: 15.h),
+                              imageResult2(
+                                      height,
+                                      state.dataImageEntity.bentukWajah!,
+                                      state.dataImageEntity.persentase!)
+                                  .animate()
+                                  .slideY(
+                                      begin: 1,
+                                      end: 0,
+                                      delay: const Duration(milliseconds: 500)),
+                              SizedBox(height: 15.h),
+                              imageResult3(ciriWajah,
+                                      state.dataImageEntity.bentukWajah!)
+                                  .animate()
+                                  .slideY(begin: 1, end: 0),
+                              SizedBox(height: 90.h)
+                            ]),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  backButtonUser(context),
-                ]);
+                      ],
+                    ),
+                    backButtonUser(context),
+                  ]),
+                );
               }
               return const SizedBox();
             },
@@ -105,9 +124,9 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Positioned backButtonUser(BuildContext context) {
     return Positioned(
-      left: 20,
-      right: 20,
-      bottom: 10,
+      left: 20.w,
+      right: 20.w,
+      bottom: 10.h,
       child: CustomButton(
         onTap: () {
           deleteImgs();
@@ -115,36 +134,36 @@ class _ReportScreenState extends State<ReportScreen> {
         },
         text: "main menu",
         imageAsset: "Assets/Icons/main-menu.png",
-        width: 50,
-        height: 40,
+        width: 50.w,
+        height: 40.h,
       ),
     );
   }
 
   Container imageResult3(CiriWajah ciriWajah, String bentukWajah) {
     return Container(
-      height: 355,
-      width: 300,
+      height: 300.h,
+      width: 300.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(255, 217, 217, 217),
+        color: MyColors().third,
         border: Border.all(
           color: Colors.black,
-          width: 2.0,
+          width: 2.w,
         ),
       ),
       child: Column(children: [
-        const SizedBox(height: 15),
-        const Text(
+        SizedBox(height: 15.h),
+        Text(
           "Ciri dari wajah",
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontFamily: 'Urbanist',
               fontWeight: FontWeight.w700),
         ),
         SizedBox(
-          height: 250,
-          width: 280,
+          height: 250.h,
+          width: 280.w,
           child: ciriWajah.faceShapes.containsKey(bentukWajah)
               ? ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
@@ -162,17 +181,17 @@ class _ReportScreenState extends State<ReportScreen> {
                             child: RichText(
                               text: TextSpan(
                                 text: "• ",
-                                style: const TextStyle(
-                                    fontSize: 20,
+                                style: TextStyle(
+                                    fontSize: 20.sp,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w500),
                                 children: [
                                   TextSpan(
                                       text: deskripsiWajah[index],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16,
+                                          fontSize: 16.sp,
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w500)),
                                 ],
@@ -192,14 +211,14 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Container imageResult2(double height, String bentukWajah, double persentase) {
     return Container(
-      height: height * 0.3,
-      width: 300,
+      height: 200.h,
+      width: 300.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(255, 217, 217, 217),
+        color: MyColors().third,
         border: Border.all(
           color: Colors.black,
-          width: 2.0,
+          width: 2.w,
         ),
       ),
       child: ResultCard(bentuk_wajah: bentukWajah, persentase: persentase),
@@ -209,8 +228,8 @@ class _ReportScreenState extends State<ReportScreen> {
   SizedBox imageResult(List<String> imageUrls) {
     return SizedBox(
       // atur lebar, tinggi, dan warna latar belakang container sesuai kebutuhan
-      width: 300,
-      height: 330,
+      width: 280.w,
+      height: 300.h,
       child: Stack(children: [
         Center(
           child: SvgPicture.asset(
@@ -231,8 +250,8 @@ class _ReportScreenState extends State<ReportScreen> {
         // String image = entry.value;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 500),
-          width: _currentIndex == index ? 25 : 10,
-          height: 10,
+          width: _currentIndex == index ? 25.w : 10.w,
+          height: 10.h,
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -245,17 +264,17 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Positioned imagePreprocessDetail() {
     return Positioned(
-      bottom: 0,
-      left: 12,
-      right: 12,
-      top: 0,
+      bottom: 0.h,
+      left: 12.w,
+      right: 12.w,
+      top: 0.h,
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-              padding: const EdgeInsets.only(bottom: 30),
+              padding: EdgeInsets.only(bottom: 30.h),
               child: Text(imageDes[_currentIndex],
-                  style: const TextStyle(
-                      fontSize: 16,
+                  style: TextStyle(
+                      fontSize: 16.sp,
                       color: Colors.white,
                       fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w700)))),
@@ -264,29 +283,29 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Positioned imagePreprocessBox(List<String> imageUrls) {
     return Positioned(
-      bottom: 70,
-      left: 12,
-      right: 12,
-      top: 55,
+      bottom: 65.h,
+      left: 5.w,
+      right: 5.w,
+      top: 50.h,
       child: Container(
-        height: 230,
+        height: 230.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: CarouselSlider(
           items: imageUrls.map((image) {
             return Container(
-              width: 220,
-              height: 100,
+              width: 220.w,
+              height: 100.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(10.r),
                 border: Border.all(
                   color: Colors.grey,
                   width: 1.0,
                 ),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(10.r),
                 child: Image.network(
                   image,
                   fit: BoxFit.fill,
@@ -307,7 +326,7 @@ class _ReportScreenState extends State<ReportScreen> {
             );
           }).toList(),
           options: CarouselOptions(
-            height: 230,
+            height: 230.h,
             aspectRatio: 16 / 9,
             viewportFraction: 0.8,
             enableInfiniteScroll: true,
@@ -328,7 +347,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Container TopDecoration() {
+  Container topDecoration() {
     return Container(
       alignment: Alignment.topRight,
       child: SvgPicture.asset(

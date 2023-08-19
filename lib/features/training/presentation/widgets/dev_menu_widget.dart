@@ -1,5 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:face_shape/features/classification/presentation/widgets/upload_progress.dart';
+import 'package:face_shape/widgets/upload_progress.dart';
 import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

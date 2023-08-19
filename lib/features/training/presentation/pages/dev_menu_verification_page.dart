@@ -9,7 +9,7 @@ import 'package:face_shape/features/training/presentation/pages/dev_menu_result.
 import 'package:face_shape/widgets/costum_des_verif2.dart';
 import 'package:face_shape/widgets/custom_des_verif.dart';
 import 'package:face_shape/widgets/custom_media2.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:face_shape/widgets/loading2.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';

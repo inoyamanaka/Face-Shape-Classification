@@ -11,7 +11,7 @@ import 'package:face_shape/features/classification/presentation/widgets/title_pa
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,15 +26,10 @@ class UserMenuPage extends StatefulWidget {
 }
 
 class _UserMenuPageState extends State<UserMenuPage> {
-  final bool _isLoading = false;
+  bool isLoading = false;
 
   late File image;
   String? filePath;
-
-  // void inject() async {
-  //   final injection = Injection();
-  //   await injection.init();
-  // }
 
   @override
   void initState() {
@@ -57,44 +52,48 @@ class _UserMenuPageState extends State<UserMenuPage> {
               Get.toNamed(Routes.menu);
               return false;
             },
-            child: Stack(children: [
-              SizedBox(
-                width: width,
-                height: height,
-                child: Column(children: [
-                  CustomBackButton(
-                    onTap: () {
-                      Get.toNamed(Routes.menu);
-                    },
-                  ),
-                  SizedBox(height: 15.h),
-                  const TitleApp(textTitle: 'Pilih media'),
-                  SizedBox(height: 10.h),
-                  const SubTitileApp(
-                          text:
-                              "Tentukan pilihan menggunakan gambar galeri atau foto media")
-                      .animate()
-                      .slideY(begin: 1, end: 0),
-                  SizedBox(height: 25.h),
-                  BlocConsumer<ClassificationBlocUpload,
-                      UploadClassificationState>(
-                    bloc: uploadBloc,
-                    listener: (context, state) {
-                      if (state is UploadClassificationLoading) {}
-                      if (state is UploadClassificationFailure) {
-                        Get.toNamed(Routes.userResult);
-                      }
-                      if (state is UploadClassificationSuccess) {
-                        if (state.imageEntity.message ==
-                            "File failed to uploaded") {
-                          noFaceDetection(context);
-                        } else {
-                          Get.toNamed(Routes.userResult);
-                        }
-                      }
-                    },
-                    builder: (context, state) {
-                      return CostumMedia(
+            child: BlocConsumer<ClassificationBlocUpload,
+                UploadClassificationState>(
+              bloc: uploadBloc,
+              listener: (context, state) {
+                if (state is UploadClassificationFailure) {
+                  Get.toNamed(Routes.userResult);
+                }
+                if (state is UploadClassificationSuccess) {
+                  if (state.imageEntity.message == "File failed to uploaded") {
+                    noFaceDetection(context);
+                  } else {
+                    Get.toNamed(Routes.userResult);
+                  }
+                }
+              },
+              builder: (context, state) {
+                if (state is UploadClassificationLoading) {
+                  return const LoadingOverlay(
+                    isLoading: true,
+                    text: "Mohon tunggu sebentar.....",
+                  );
+                }
+                return Stack(children: [
+                  SizedBox(
+                    width: width,
+                    height: height,
+                    child: Column(children: [
+                      CustomBackButton(
+                        onTap: () {
+                          Get.toNamed(Routes.menu);
+                        },
+                      ),
+                      SizedBox(height: 15.h),
+                      const TitleApp(textTitle: 'Pilih media'),
+                      SizedBox(height: 10.h),
+                      const SubTitileApp(
+                              text:
+                                  "Tentukan pilihan menggunakan gambar galeri atau foto media")
+                          .animate()
+                          .slideY(begin: 1, end: 0),
+                      SizedBox(height: 25.h),
+                      CostumMedia(
                         onTap: () async {
                           final picker = ImagePicker();
                           final pickedFile = await picker.pickImage(
@@ -105,20 +104,20 @@ class _UserMenuPageState extends State<UserMenuPage> {
                         },
                         text: "Gallery",
                         imageAsset: 'Assets/Images/gallery.jpg',
-                      ).animate().slideY(begin: 1, end: 0);
-                    },
+                      ).animate().slideY(begin: 1, end: 0),
+                      SizedBox(height: 15.h),
+                      cameraMenu(context).animate().slideY(begin: 1, end: 0),
+                      SizedBox(height: 35.h),
+                      panduanButton(context).animate().slideY(begin: 1, end: 0),
+                      const Spacer(),
+                      const BottomDecoration(),
+                    ]),
                   ),
-                  SizedBox(height: 15.h),
-                  cameraMenu(context).animate().slideY(begin: 1, end: 0),
-                  SizedBox(height: 35.h),
-                  panduanButton(context).animate().slideY(begin: 1, end: 0),
-                  const Spacer(),
-                  const BottomDecoration(),
-                ]),
-              ),
-              LoadingOverlay(
-                  text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
-            ]),
+                  LoadingOverlay(
+                      text: "Mohon Tunggu Sebentar...", isLoading: isLoading)
+                ]);
+              },
+            ),
           ),
         ),
       ),

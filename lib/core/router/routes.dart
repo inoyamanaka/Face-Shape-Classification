@@ -1,7 +1,9 @@
 class Routes {
   static Future<String> get initialRoute async {
-    return menu;
+    return splash;
   }
+
+  static const splash = '/splash_screen';
 
   static const menu = '/menu';
   static const userMenu = '/user_menu';
