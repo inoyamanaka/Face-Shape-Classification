@@ -1,10 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:face_shape/features/classification/domain/usecases/upload_dataset.dart';
 import 'package:face_shape/features/classification/presentation/widgets/upload_progress.dart';
+import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DevMenuWidget extends StatelessWidget {
@@ -23,8 +21,8 @@ class DevMenuWidget extends StatelessWidget {
         FilePickerResult? result = await FilePicker.platform.pickFiles();
         String? path = result!.files.first.path;
 
-        final uploadDataset = UploadDataset();
-        isSucces = await uploadDataset.call(path!, loadingControllerP);
+        final uploadDataset = DevMenuPage();
+        // isSucces = await uploadDataset.call(path!, loadingControllerP);
 
         isSucces == true ? SuccesUpload(context) : Container();
       },

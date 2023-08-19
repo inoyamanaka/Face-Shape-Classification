@@ -4,7 +4,7 @@ import 'package:face_shape/features/classification/data/models/request/upload_im
 import 'package:face_shape/features/classification/domain/entities/user_image.dart';
 
 abstract class ReqClassificationRemoteDataSource {
-  Future<ImageEntity> uploadImage(String filepath);
+  Future<ImageEntity> uploadImage(UploadImageModel filepath);
 }
 
 class ReqClassificationRemoteDataSourceImpl
@@ -14,18 +14,17 @@ class ReqClassificationRemoteDataSourceImpl
   ReqClassificationRemoteDataSourceImpl(this.client);
 
   @override
-  Future<ImageEntity> uploadImage(String filePath) async {
+  Future<ImageEntity> uploadImage(UploadImageModel filePath) async {
     try {
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(filePath, filename: 'file'),
+        'file':
+            await MultipartFile.fromFile(filePath.message, filename: 'file'),
       });
 
       final response = await client.post(
         '${ApiUrl.Url_pred}',
         data: formData,
       );
-
-      print(response.data!);
 
       return UploadImageModel.fromJson(
           response.data!); // Placeholder return value, modify as needed

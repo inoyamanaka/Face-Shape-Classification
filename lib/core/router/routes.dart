@@ -4,8 +4,10 @@ class Routes {
   }
 
   static const menu = '/menu';
-  static const userMenu = '/usermenu';
-  static const userGuide = '/userGuide';
-  static const userCamera = '/userCamera';
-  static const userResult = '/userResult';
+  static const userMenu = '/user_menu';
+  static const userGuide = '/user_guide';
+  static const userCamera = '/user_camera';
+  static const userResult = '/user_result';
+
+  static const trainMenu = '/train_menu';
 }

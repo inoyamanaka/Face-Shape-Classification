@@ -1,14 +1,16 @@
-import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/Datas/url_host.dart';
+import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/models/ciri_wajah.dart';
 import 'package:face_shape/core/router/routes.dart';
+import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
+import 'package:face_shape/features/classification/presentation/widgets/user_result_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
@@ -26,9 +28,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   PageController pageController = PageController(viewportFraction: 0.7);
 
-  double pageOffset = 0;
-  double _persentase = 0;
-  bool _isLoading = false;
+  final getBloc = sl<ClassificationBlocGet>();
 
   final List<String> imageDes = [
     "Original Image",
@@ -37,38 +37,12 @@ class _ReportScreenState extends State<ReportScreen> {
     "Landmark Extraction"
   ];
 
-  //------------------------------------------
-  String _bentuk_wajah = "";
-  //------------------------------------------
-
-  List<String> _imageUrls = [];
-
   int _currentIndex = 0;
-
-  Future<void> fetchImages() async {
-    final response = await http.get(Uri.parse('${ApiUrl.Url}/get_images'));
-    if (response.statusCode == 200) {
-      final List<dynamic> urls = jsonDecode(response.body)['urls'];
-      _bentuk_wajah = jsonDecode(response.body)['bentuk wajah'];
-      _persentase =
-          double.parse(jsonDecode(response.body)['persen'].toString());
-      print("ada isinya ngga sih? $_persentase");
-      setState(() {
-        _isLoading = false;
-        _imageUrls = urls.cast<String>();
-        _persentase = _persentase.toDouble();
-        print(_bentuk_wajah.toString());
-        print(_imageUrls);
-      });
-    } else {
-      throw Exception('Failed to fetch images');
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchImages();
+    getBloc.add(GetEvent());
   }
 
   @override
@@ -77,39 +51,54 @@ class _ReportScreenState extends State<ReportScreen> {
     final double height = size.height;
 
     final ciriWajah = CiriWajah();
-    return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          Get.toNamed(Routes.userCamera);
-          return false;
-        },
-        child: Stack(children: [
-          Column(
-            children: [
-              SizedBox(
-                height: height,
-                child: SingleChildScrollView(
-                  child: Column(children: [
-                    TopDecoration(),
-                    const SizedBox(height: 15),
-                    TitlePage(),
-                    const SizedBox(height: 5),
-                    imageResult(),
-                    sliderIndicator(),
-                    const SizedBox(height: 15),
-                    imageResult2(height),
-                    const SizedBox(height: 15),
-                    imageResult3(ciriWajah),
-                    const SizedBox(height: 90)
-                  ]),
-                ),
-              ),
-            ],
+    return BlocProvider(
+      create: (context) => getBloc,
+      child: Scaffold(
+        body: WillPopScope(
+          onWillPop: () async {
+            Get.toNamed(Routes.userCamera);
+            return false;
+          },
+          child: BlocBuilder<ClassificationBlocGet, GetClassificationState>(
+            builder: (context, state) {
+              if (state is GetClassificationLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is GetClassificationSuccess) {
+                return Stack(children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: height,
+                        child: SingleChildScrollView(
+                          child: Column(children: [
+                            TopDecoration(),
+                            const SizedBox(height: 15),
+                            const TitleApp(textTitle: "Hasil Deteksi Wajah"),
+                            const SizedBox(height: 5),
+                            imageResult(state.dataImageEntity.urls!),
+                            sliderIndicator(state.dataImageEntity.urls!),
+                            const SizedBox(height: 15),
+                            imageResult2(
+                                height,
+                                state.dataImageEntity.bentukWajah!,
+                                state.dataImageEntity.persentase!),
+                            const SizedBox(height: 15),
+                            imageResult3(
+                                ciriWajah, state.dataImageEntity.bentukWajah!),
+                            const SizedBox(height: 90)
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                  backButtonUser(context),
+                ]);
+              }
+              return const SizedBox();
+            },
           ),
-          backButtonUser(context),
-          LoadingOverlay(
-              text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
-        ]),
+        ),
       ),
     );
   }
@@ -132,7 +121,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Container imageResult3(CiriWajah ciriWajah) {
+  Container imageResult3(CiriWajah ciriWajah, String bentukWajah) {
     return Container(
       height: 355,
       width: 300,
@@ -156,15 +145,14 @@ class _ReportScreenState extends State<ReportScreen> {
         SizedBox(
           height: 250,
           width: 280,
-          child: ciriWajah.faceShapes.containsKey(_bentuk_wajah)
+          child: ciriWajah.faceShapes.containsKey(bentukWajah)
               ? ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: 4,
                   itemBuilder: (BuildContext context, int index) {
-                    // final bentukWajah =
-                    //     ciriWajah.faceShapes.keys.elementAt(index);
-                    // print(bentukWajah);
-                    final deskripsiWajah = ciriWajah.faceShapes[_bentuk_wajah]!;
+                    final bentukWajah =
+                        ciriWajah.faceShapes.keys.elementAt(index);
+                    final deskripsiWajah = ciriWajah.faceShapes[bentukWajah]!;
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -202,7 +190,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Container imageResult2(double height) {
+  Container imageResult2(double height, String bentukWajah, double persentase) {
     return Container(
       height: height * 0.3,
       width: 300,
@@ -214,69 +202,11 @@ class _ReportScreenState extends State<ReportScreen> {
           width: 2.0,
         ),
       ),
-      child: Column(children: [
-        const SizedBox(height: 15),
-        subTitleLaporan(),
-        Row(
-          children: [
-            faceShapeResult(),
-            const SizedBox(width: 5),
-            faceShapePercent(),
-          ],
-        ),
-      ]),
+      child: ResultCard(bentuk_wajah: bentukWajah, persentase: persentase),
     );
   }
 
-  CircularPercentIndicator faceShapePercent() {
-    return CircularPercentIndicator(
-      radius: 50.0,
-      lineWidth: 12.0,
-
-      percent:
-          (_persentase / 100), // nilai progress saat ini (dalam bentuk desimal)
-      center: Text("$_persentase%"), // teks persentase
-      progressColor: const Color.fromARGB(255, 80, 101, 252),
-    );
-  }
-
-  Padding faceShapeResult() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 33),
-      child: SizedBox(
-        width: 150,
-        child: RichText(
-          text: TextSpan(
-            style: const TextStyle(fontSize: 16.0, color: Colors.black),
-            children: [
-              const TextSpan(
-                  text:
-                      'Berdasarkan hasil deteksi bentuk wajah yang anda miliki adalah bentuk wajah jenis ',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w300)),
-              TextSpan(
-                  text: '$_bentuk_wajah',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Text subTitleLaporan() {
-    return const Text(
-      "Laporan hasil deteksi",
-      style: TextStyle(
-          fontSize: 18, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
-    );
-  }
-
-  SizedBox imageResult() {
+  SizedBox imageResult(List<String> imageUrls) {
     return SizedBox(
       // atur lebar, tinggi, dan warna latar belakang container sesuai kebutuhan
       width: 300,
@@ -287,25 +217,25 @@ class _ReportScreenState extends State<ReportScreen> {
             "Assets/Svgs/report_design.svg",
           ),
         ),
-        imagePreprocessBox(),
+        imagePreprocessBox(imageUrls),
         imagePreprocessDetail()
       ]),
     );
   }
 
-  Row sliderIndicator() {
+  Row sliderIndicator(List<String> imageUrls) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: _imageUrls.asMap().entries.map((entry) {
+      children: imageUrls.asMap().entries.map((entry) {
         int index = entry.key;
         // String image = entry.value;
         return AnimatedContainer(
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           width: _currentIndex == index ? 25 : 10,
           height: 10,
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
             color: _currentIndex == index ? Colors.black : Colors.grey,
           ),
         );
@@ -332,7 +262,7 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Positioned imagePreprocessBox() {
+  Positioned imagePreprocessBox(List<String> imageUrls) {
     return Positioned(
       bottom: 70,
       left: 12,
@@ -344,7 +274,7 @@ class _ReportScreenState extends State<ReportScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: CarouselSlider(
-          items: _imageUrls.map((image) {
+          items: imageUrls.map((image) {
             return Container(
               width: 220,
               height: 100,
@@ -366,10 +296,10 @@ class _ReportScreenState extends State<ReportScreen> {
                     return Shimmer.fromColors(
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
+                      period: const Duration(milliseconds: 800),
                       child: Container(
                         color: Colors.grey[300],
                       ),
-                      period: Duration(milliseconds: 800),
                     );
                   },
                 ),
@@ -383,7 +313,7 @@ class _ReportScreenState extends State<ReportScreen> {
             enableInfiniteScroll: true,
             reverse: false,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
+            autoPlayInterval: const Duration(seconds: 3),
             autoPlayCurve: Curves.fastOutSlowIn,
             enlargeCenterPage: true,
             scrollDirection: Axis.horizontal,
@@ -395,14 +325,6 @@ class _ReportScreenState extends State<ReportScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Text TitlePage() {
-    return Text(
-      "Hasil deteksi wajah",
-      style: TextStyle(
-          fontSize: 28, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
     );
   }
 

@@ -5,8 +5,10 @@ part 'get_image_model.g.dart';
 
 @JsonSerializable(createToJson: false, fieldRename: FieldRename.snake)
 class GetImageModel extends DataImageEntity {
-  GetImageModel(List<String> urls, String bentukWajah, double persentase)
-      : super(urls, bentukWajah, persentase);
+  const GetImageModel(
+      {required super.urls,
+      required super.bentukWajah,
+      required super.persentase});
 
   factory GetImageModel.fromJson(Map<String, dynamic> json) =>
       _$GetImageModelFromJson(json);

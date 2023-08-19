@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.0"
-  animated_notch_bottom_bar:
-    dependency: "direct main"
-    description:
-      name: animated_notch_bottom_bar
-      sha256: "029080aa5b7daa6c05d6118c485a3560ced5976b2cde1049442c2cb74ad9757d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.6"
   animated_splash_screen:
     dependency: "direct main"
     description:
@@ -414,6 +406,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.15"
+  flutter_screenutil:
+    dependency: "direct main"
+    description:
+      name: flutter_screenutil
+      sha256: "1b61f8c4cbf965104b6ca7160880ff1af6755aad7fec70b58444245132453745"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.8.4"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -1071,4 +1071,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.10.0"

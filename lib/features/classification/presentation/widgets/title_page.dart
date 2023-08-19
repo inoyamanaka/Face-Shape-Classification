@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TitleApp extends StatelessWidget {
   final String textTitle;
@@ -8,8 +9,8 @@ class TitleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       textTitle,
-      style: const TextStyle(
-          fontSize: 28, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
+      style: TextStyle(
+          fontSize: 28.sp, fontFamily: 'Urbanist', fontWeight: FontWeight.w700),
     );
   }
 }

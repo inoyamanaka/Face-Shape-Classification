@@ -6,6 +6,7 @@ import 'package:face_shape/features/classification/presentation/pages/user_menu_
 import 'package:face_shape/features/classification/presentation/pages/user_menu_guide.dart';
 import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
 import 'package:face_shape/features/classification/presentation/pages/user_menu_result.dart';
+import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
 import 'package:get/get.dart';
 
 class Nav {
@@ -33,6 +34,11 @@ class Nav {
     GetPage(
       name: Routes.userResult,
       page: () => const ReportScreen(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Routes.trainMenu,
+      page: () => const DevMenuPage(),
       transition: Transition.cupertino,
     ),
   ];

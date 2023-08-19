@@ -1,9 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:face_shape/core/models/main_menu_att.dart';
-import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
+import 'package:face_shape/core/router/routes.dart';
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 ValueNotifier<int> _currentIndexNotifier = ValueNotifier<int>(0);
 
@@ -20,8 +21,8 @@ class _ImageDetailState extends State<ImageDetail> {
     return Column(
       children: [
         Container(
-          height: 300,
-          width: 330,
+          height: 300.h,
+          width: 330.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
           ),
@@ -29,12 +30,12 @@ class _ImageDetailState extends State<ImageDetail> {
             items: MainMenuAtt.imageListGuide
                 .map((image) => Image.asset(
                       image,
-                      height: 225,
-                      width: 225,
+                      height: 225.h,
+                      width: 225.w,
                     ))
                 .toList(),
             options: CarouselOptions(
-              height: 250,
+              height: 250.h,
               aspectRatio: 16 / 9,
               viewportFraction: 0.8,
               enableInfiniteScroll: true,
@@ -45,8 +46,6 @@ class _ImageDetailState extends State<ImageDetail> {
               enlargeCenterPage: true,
               scrollDirection: Axis.horizontal,
               onPageChanged: (index, reason) {
-                // currentIndex = index;
-
                 setState(() {
                   _currentIndexNotifier.value = index;
                 });
@@ -67,8 +66,8 @@ Row sliderIndicator() {
       int index = entry.key;
 
       return Container(
-        width: 10,
-        height: 10,
+        width: 10.w,
+        height: 10.h,
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -83,15 +82,7 @@ Row sliderIndicator() {
 Container topMenu(BuildContext context) {
   return Container(
       alignment: Alignment.topRight,
-      child: CustomBackButton(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.rightToLeftWithFade,
-              child: const UserMenuPage(),
-            ),
-          );
-        },
-      ));
+      child: CustomBackButton(onTap: () {
+        Get.toNamed(Routes.userMenu);
+      }));
 }

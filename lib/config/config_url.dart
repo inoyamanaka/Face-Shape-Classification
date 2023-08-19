@@ -3,7 +3,7 @@
 class ApiUrl {
   // static const Url = "http://192.168.100.243:8080";
 
-  static const Url = "https://11a2-116-254-119-237.ngrok-free.app";
+  static const Url = "https://33a1-149-113-69-37.ngrok-free.app";
 
   // static const Url = "https://yamanaka1.pagekite.me";
   static const Url_pred = "${ApiUrl.Url}/upload";

@@ -1,8 +1,8 @@
 import 'package:face_shape/config/config.dart';
 import 'package:face_shape/features/classification/presentation/pages/main_menu_page.dart';
-import 'package:face_shape/features/classification/presentation/widgets/dev_menu_widget.dart';
-import 'package:face_shape/features/classification/presentation/widgets/dev_nextBtn.dart';
 import 'package:face_shape/features/training/presentation/pages/dev_menu_preprocess_page.dart';
+import 'package:face_shape/features/training/presentation/widgets/dev_menu_widget.dart';
+import 'package:face_shape/features/training/presentation/widgets/dev_nextBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:face_shape/core/error/failures.dart';
 import 'package:face_shape/features/classification/data/data_sources/classification_datasource_response.dart';
-import 'package:face_shape/features/classification/data/models/response/get_image_model.dart';
 import 'package:face_shape/features/classification/domain/entities/user_image.dart';
 import 'package:face_shape/features/classification/domain/repositories/fetch_image_repositories.dart';
 
@@ -13,8 +12,7 @@ class GetImageRepositoryImpl implements GetImageRepository {
 
   GetImageRepositoryImpl(this.datasource);
   @override
-  Future<Either<Failure, DataImageEntity>> getImageAtt(
-      GetImageModel imageAtt) async {
+  Future<Either<Failure, DataImageEntity>> getImageAtt() async {
     try {
       final remoteGetImage = await datasource.getImageAtt();
 
@@ -35,6 +33,8 @@ class GetImageRepositoryImpl implements GetImageRepository {
         return Left(ServerFailure(e.message!));
       }
     } catch (e) {
+      // print("ini yang terjadi4");
+
       return Left(ServerFailure(e.toString()));
     }
   }

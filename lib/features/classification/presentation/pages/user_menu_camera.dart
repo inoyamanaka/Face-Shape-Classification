@@ -1,26 +1,25 @@
-import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:face_shape/config/config.dart';
 import 'package:face_shape/core/router/routes.dart';
-import 'package:face_shape/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:page_transition/page_transition.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
-import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/bottom_decoration.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:face_shape/features/classification/presentation/widgets/subtitle_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
+
+import '../../data/models/request/upload_image_model.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -78,13 +77,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    inject();
     initCamera();
-  }
-
-  void inject() async {
-    final injection = Injection();
-    await injection.init();
   }
 
   @override
@@ -100,81 +93,84 @@ class _CameraScreenState extends State<CameraScreen> {
 
     return BlocProvider(
       create: (context) => uploadBloc,
-      child: Scaffold(
-        body: Stack(children: [
-          SizedBox(
+      child: ScreenUtilInit(
+        builder: (context, child) => Scaffold(
+          body: SizedBox(
             width: size.width,
             height: size.height,
             child: Column(children: [
               topMenu(context),
-              const SizedBox(height: 15),
+              SizedBox(height: 15.h),
               const TitleApp(
                 textTitle: "Deteksi muka",
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               const SubTitileApp(
                   text:
                       "Arahkan muka pada kamera lalu tekan icon kamera yang ada di tengah untuk menangkap gambar"),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               mainFeature(),
-              const SizedBox(height: 15),
+              SizedBox(height: 15.h),
               BlocConsumer<ClassificationBlocUpload, UploadClassificationState>(
                 bloc: uploadBloc,
                 listener: (context, state) {
                   // print(state);
                   if (state is UploadClassificationLoading) {}
                   if (state is UploadClassificationFailure) {
-                    print("cek");
-                    Get.toNamed(Routes.userResult);
+                    noFaceDetection;
                   }
                   if (state is UploadClassificationSuccess) {
-                    // print("cell1");
-                    Get.toNamed(Routes.userResult);
+                    // print(state.imageEntity.message);
+                    if (state.imageEntity.message ==
+                        "File failed to uploaded") {
+                      noFaceDetection(context);
+                    } else {
+                      Get.toNamed(Routes.userResult);
+                    }
                   }
                 },
                 builder: (context, state) {
                   return CustomButton(
                     onTap: () {
-                      uploadBloc.add(UploadEvent(filepath: filePath!));
+                      uploadBloc.add(UploadEvent(
+                          filepath: UploadImageModel(message: filePath!)));
                     },
                     text: "Deteksi",
                     imageAsset: "Assets/Icons/face-recognition.png",
-                    width: 40,
-                    height: 40,
+                    width: 40.w,
+                    height: 40.h,
                   );
                 },
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               const Spacer(),
               const BottomDecoration(),
             ]),
           ),
-          LoadingOverlay(
-              text: "Mohon Tunggu Sebentar...", isLoading: isLoading),
-        ]),
+        ),
       ),
     );
   }
 
   SizedBox mainFeature() {
     return SizedBox(
-        width: 280,
-        height: 350,
+        width: 280.w,
+        height: 320.h,
         child: Stack(
           children: [
             Positioned(
-                bottom: 35,
-                left: 0,
-                right: 0,
-                top: 5,
+                bottom: 35.h,
+                left: 0.w,
+                right: 0.w,
+                top: 5.h,
                 child: Container(
-                  height: 320,
+                  height: 320.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    color: const Color.fromARGB(255, 217, 217, 217),
+                    color: MyColors().third,
                     border: Border.all(
                       color: Colors.black,
-                      width: 2.0,
+                      width: 2.w,
                     ),
                   ),
                   child: _isCameraInitialized
@@ -187,27 +183,19 @@ class _CameraScreenState extends State<CameraScreen> {
                         )
                       : Container(),
                 )),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                faceLine(),
-              ],
-            ),
+            faceLine(),
             Positioned(
-              bottom: 5,
-              left: 0,
-              right: 0,
+              bottom: 5.h,
+              left: 0.w,
+              right: 0.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const SizedBox(width: 45),
+                  SizedBox(width: 45.w),
                   cameraDirectionSettings(),
                   takePicture(context),
                   flashSettings(),
-                  const SizedBox(width: 45),
+                  SizedBox(width: 45.w),
                 ],
               ),
             ),
@@ -217,12 +205,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   CustomBackButton topMenu(BuildContext context) {
     return CustomBackButton(onTap: () {
-      Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const UserMenuPage()),
-      );
+      Get.toNamed(Routes.userMenu);
     });
   }
 
@@ -240,45 +223,10 @@ class _CameraScreenState extends State<CameraScreen> {
         XFile picture = await _controller.takePicture();
         await picture.saveTo(filePath!);
 
-        debugPrint("filepath : ${filePath!}");
+        // debugPrint("filepath : ${filePath!}");
 
-        // Menyimpan gambar berhasil, sekarang tampilkan dialog
         // ignore: use_build_context_synchronously
-        AwesomeDialog(
-          context: context,
-          title: "Gambar tersimpan",
-          desc:
-              "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
-          dialogType: DialogType.success,
-          animType: AnimType.bottomSlide,
-          btnOkOnPress: () {},
-          body: Column(
-            children: [
-              Image.file(
-                File(filePath!),
-                width: 230,
-                height: 250,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "Gambar sudah tersimpan silahkan klik tombol deteksi untuk melakukan proses deteksi",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ).show();
+        takePictureDialog(context, filePath!).show();
       },
       child: SvgPicture.asset("Assets/Svgs/camera_take.svg"),
     );
@@ -316,13 +264,14 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Positioned faceLine() {
     return Positioned(
-      top: 5,
-      left: 40,
+      top: 15.h,
+      left: 20.w,
+      right: 20.w,
       child: SizedBox(
-        width: 280,
+        width: 280.w,
         child: SvgPicture.asset(
           "Assets/Svgs/face_line.svg",
-          height: 250,
+          height: 230.h,
         ),
       ),
     );

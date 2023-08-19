@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:face_shape/core/error/failures.dart';
 import 'package:face_shape/features/classification/data/data_sources/classification_datasource_request.dart';
+import 'package:face_shape/features/classification/data/models/request/upload_image_model.dart';
 import 'package:face_shape/features/classification/domain/entities/user_image.dart';
 import 'package:face_shape/features/classification/domain/repositories/upload_image_repositories.dart';
 
@@ -12,7 +13,8 @@ class UploadImageRepositoryImpl extends UploadImageRepository {
 
   UploadImageRepositoryImpl(this.datasource);
   @override
-  Future<Either<Failure, ImageEntity>> uploadImage(String filePath) async {
+  Future<Either<Failure, ImageEntity>> uploadImage(
+      UploadImageModel filePath) async {
     try {
       final remoteGetImage = await datasource.uploadImage(filePath);
 
@@ -33,6 +35,7 @@ class UploadImageRepositoryImpl extends UploadImageRepository {
         return Left(ServerFailure(e.message!));
       }
     } catch (e) {
+      // print("ini yang terjadi");
       return Left(ServerFailure(e.toString()));
     }
   }

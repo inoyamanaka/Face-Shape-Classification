@@ -16,7 +16,7 @@ sealed class GetClassificationEvent extends Equatable {
 }
 
 class UploadEvent extends UploadClassificationEvent {
-  final String filepath;
+  final UploadImageModel filepath;
   const UploadEvent({
     required this.filepath,
   });

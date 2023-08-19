@@ -19,6 +19,7 @@ class ResClassificationRemoteDataSourceImpl
       final response = await client.get<Map<String, dynamic>>(
           '${ApiUrl.Url}/get_images',
           options: Options(headers: {}));
+      // print(response.data!);
 
       return GetImageModel.fromJson(response.data!);
     } on DioException catch (e) {
@@ -28,6 +29,8 @@ class ResClassificationRemoteDataSourceImpl
         response: e.response,
       );
     } catch (e) {
+      // print(e);
+
       throw ();
     }
   }

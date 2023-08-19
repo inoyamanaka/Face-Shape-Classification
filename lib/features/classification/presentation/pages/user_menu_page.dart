@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/router/routes.dart';
+import 'package:face_shape/features/classification/data/models/request/upload_image_model.dart';
 import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
-import 'package:face_shape/features/classification/presentation/pages/main_menu_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/bottom_decoration.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_media.dart';
+import 'package:face_shape/features/classification/presentation/widgets/dialogue.dart';
 import 'package:face_shape/features/classification/presentation/widgets/subtitle_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
@@ -13,9 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:face_shape/widgets/loading.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:page_transition/page_transition.dart';
 
 class UserMenuPage extends StatefulWidget {
   const UserMenuPage({super.key});
@@ -25,20 +26,19 @@ class UserMenuPage extends StatefulWidget {
 }
 
 class _UserMenuPageState extends State<UserMenuPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   late File image;
   String? filePath;
 
-  void inject() async {
-    final injection = Injection();
-    await injection.init();
-  }
+  // void inject() async {
+  //   final injection = Injection();
+  //   await injection.init();
+  // }
 
   @override
   void initState() {
     super.initState();
-    inject();
   }
 
   @override
@@ -50,73 +50,76 @@ class _UserMenuPageState extends State<UserMenuPage> {
 
     return BlocProvider(
       create: (context) => uploadBloc,
-      child: Scaffold(
-        body: WillPopScope(
-          onWillPop: () async {
-            Get.toNamed(Routes.menu);
-            return false;
-          },
-          child: Stack(children: [
-            SizedBox(
-              width: width,
-              height: height,
-              child: Column(children: [
-                CustomBackButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.rightToLeftWithFade,
-                        child: const MenuMode(),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 15),
-                const TitleApp(textTitle: 'Pilih media'),
-                const SizedBox(height: 10),
-                const SubTitileApp(
-                        text:
-                            "Tentukan pilihan menggunakan gambar galeri atau foto media")
-                    .animate()
-                    .slideY(begin: 1, end: 0),
-                const SizedBox(height: 25),
-                BlocConsumer<ClassificationBlocUpload,
-                    UploadClassificationState>(
-                  bloc: uploadBloc,
-                  listener: (context, state) {
-                    if (state is UploadClassificationLoading) {}
-                    if (state is UploadClassificationFailure) {
-                      Get.toNamed(Routes.userResult);
-                    }
-                    if (state is UploadClassificationSuccess) {
-                      Get.toNamed(Routes.userResult);
-                    }
-                  },
-                  builder: (context, state) {
-                    return CostumMedia(
-                      onTap: () async {
-                        final picker = ImagePicker();
-                        final pickedFile =
-                            await picker.pickImage(source: ImageSource.gallery);
-                        uploadBloc.add(UploadEvent(filepath: pickedFile!.path));
-                      },
-                      text: "Gallery",
-                      imageAsset: 'Assets/Images/gallery.jpg',
-                    ).animate().slideY(begin: 1, end: 0);
-                  },
-                ),
-                const SizedBox(height: 15),
-                cameraMenu(context).animate().slideY(begin: 1, end: 0),
-                const SizedBox(height: 35),
-                panduanButton(context).animate().slideY(begin: 1, end: 0),
-                const Spacer(),
-                const BottomDecoration(),
-              ]),
-            ),
-            LoadingOverlay(
-                text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
-          ]),
+      child: ScreenUtilInit(
+        builder: (context, child) => Scaffold(
+          body: WillPopScope(
+            onWillPop: () async {
+              Get.toNamed(Routes.menu);
+              return false;
+            },
+            child: Stack(children: [
+              SizedBox(
+                width: width,
+                height: height,
+                child: Column(children: [
+                  CustomBackButton(
+                    onTap: () {
+                      Get.toNamed(Routes.menu);
+                    },
+                  ),
+                  SizedBox(height: 15.h),
+                  const TitleApp(textTitle: 'Pilih media'),
+                  SizedBox(height: 10.h),
+                  const SubTitileApp(
+                          text:
+                              "Tentukan pilihan menggunakan gambar galeri atau foto media")
+                      .animate()
+                      .slideY(begin: 1, end: 0),
+                  SizedBox(height: 25.h),
+                  BlocConsumer<ClassificationBlocUpload,
+                      UploadClassificationState>(
+                    bloc: uploadBloc,
+                    listener: (context, state) {
+                      if (state is UploadClassificationLoading) {}
+                      if (state is UploadClassificationFailure) {
+                        Get.toNamed(Routes.userResult);
+                      }
+                      if (state is UploadClassificationSuccess) {
+                        if (state.imageEntity.message ==
+                            "File failed to uploaded") {
+                          noFaceDetection(context);
+                        } else {
+                          Get.toNamed(Routes.userResult);
+                        }
+                      }
+                    },
+                    builder: (context, state) {
+                      return CostumMedia(
+                        onTap: () async {
+                          final picker = ImagePicker();
+                          final pickedFile = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          uploadBloc.add(UploadEvent(
+                              filepath:
+                                  UploadImageModel(message: pickedFile!.path)));
+                        },
+                        text: "Gallery",
+                        imageAsset: 'Assets/Images/gallery.jpg',
+                      ).animate().slideY(begin: 1, end: 0);
+                    },
+                  ),
+                  SizedBox(height: 15.h),
+                  cameraMenu(context).animate().slideY(begin: 1, end: 0),
+                  SizedBox(height: 35.h),
+                  panduanButton(context).animate().slideY(begin: 1, end: 0),
+                  const Spacer(),
+                  const BottomDecoration(),
+                ]),
+              ),
+              LoadingOverlay(
+                  text: "Mohon Tunggu Sebentar...", isLoading: _isLoading)
+            ]),
+          ),
         ),
       ),
     );
@@ -129,8 +132,8 @@ class _UserMenuPageState extends State<UserMenuPage> {
       },
       text: "Panduan",
       imageAsset: "Assets/Icons/file.png",
-      width: 40,
-      height: 40,
+      width: 40.w,
+      height: 40.h,
     );
   }
 

@@ -1,4 +1,6 @@
+import 'package:face_shape/config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'path/to/camera_screen.dart';
 
 class CostumMedia extends StatelessWidget {
@@ -16,15 +18,15 @@ class CostumMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: this.onTap,
+      onTap: onTap,
       child: Container(
-        width: 310,
-        height: 165,
+        width: 310.w,
+        height: 150.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           border: Border.all(
             color: Colors.black,
-            width: 2,
+            width: 2.w,
           ),
         ),
         child: Stack(
@@ -32,8 +34,8 @@ class CostumMedia extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
               child: Image.asset(
-                this.imageAsset,
-                width: 310,
+                imageAsset,
+                width: 310.w,
                 fit: BoxFit.fill,
                 color: Colors.black54,
                 colorBlendMode: BlendMode.darken,
@@ -41,22 +43,22 @@ class CostumMedia extends StatelessWidget {
             ),
             Center(
               child: Container(
-                width: 150,
-                height: 40,
+                width: 150.w,
+                height: 40.h,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 80, 101, 252),
+                  color: MyColors().secondary,
                   borderRadius: BorderRadius.circular(40),
                   border: Border.all(
                     color: Colors.black,
-                    width: 3,
+                    width: 3.w,
                   ),
                 ),
                 child: Center(
                   child: Text(
-                    this.text,
+                    text,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w700,
                     ),
