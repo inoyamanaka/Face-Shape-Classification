@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingOverlay2 extends StatelessWidget {
-  final bool isLoading;
   final String text;
   final String name;
 
-  const LoadingOverlay2(
-      {Key? key,
-      required this.text,
-      required this.isLoading,
-      required this.name})
+  const LoadingOverlay2({Key? key, required this.text, required this.name})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: isLoading,
+      visible: true,
       child: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.black,
             ),
-            child: ModalBarrier(
+            child: const ModalBarrier(
               dismissible: false,
               color: Colors.transparent,
             ),
@@ -40,21 +36,21 @@ class LoadingOverlay2 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SpinKitSquareCircle(
+                  const SpinKitSquareCircle(
                     color: Color.fromARGB(255, 80, 101, 252),
                     size: 50.0,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 20.h,
                   ),
-                  Container(
-                    width: 220,
+                  SizedBox(
+                    width: 220.w,
                     child: Text(
-                      this.text,
+                      text,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontFamily: 'Urbanist',
                           fontWeight: FontWeight.w300),
                     ),

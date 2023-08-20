@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:face_shape/Datas/url_host.dart';
+import 'package:dio/dio.dart';
 import 'package:face_shape/config/config.dart';
+import 'package:face_shape/config/config_url.dart';
 import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/models/ciri_wajah.dart';
 import 'package:face_shape/core/router/routes.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
-import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
 class ReportScreen extends StatefulWidget {
@@ -26,10 +26,6 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
-  void deleteImgs() async {
-    await http.get(Uri.parse(ApiUrl.Url_delete_img));
-  }
-
   PageController pageController = PageController(viewportFraction: 0.7);
 
   final getBloc = sl<ClassificationBlocGet>();
@@ -128,8 +124,8 @@ class _ReportScreenState extends State<ReportScreen> {
       right: 20.w,
       bottom: 10.h,
       child: CustomButton(
-        onTap: () {
-          deleteImgs();
+        onTap: () async {
+          await Dio().get(ApiUrl.Url_delete_img);
           Get.toNamed(Routes.menu);
         },
         text: "main menu",

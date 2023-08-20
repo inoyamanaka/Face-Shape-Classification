@@ -3,13 +3,14 @@
 class ApiUrl {
   // static const Url = "http://192.168.100.243:8080";
 
-  static const Url = "https://33a1-149-113-69-37.ngrok-free.app";
+  static const Url = "https://6b52-149-113-69-37.ngrok-free.app";
 
   // static const Url = "https://yamanaka1.pagekite.me";
   static const Url_pred = "${ApiUrl.Url}/upload";
   static const Url_total_models = "${ApiUrl.Url}/count_models";
   static const Url_selected_models = "${ApiUrl.Url}/selected_models";
   static const Url_delete_img = '${ApiUrl.Url}/delete_img';
+
   static const Url_model = '${ApiUrl.Url}/upload_data';
   static const Url_total_files = '${ApiUrl.Url}/get_total_files';
   static const Url_preprocessing = '${ApiUrl.Url}/do_preprocessing';

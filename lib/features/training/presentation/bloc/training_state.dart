@@ -1,9 +1,18 @@
 part of 'training_bloc.dart';
 
-abstract class TrainingState extends Equatable {
-  const TrainingState();  
+abstract class UploadDatasetState extends Equatable {
+  const UploadDatasetState();
 
   @override
   List<Object> get props => [];
 }
-class TrainingInitial extends TrainingState {}
+
+// UPLOAD DATASET STATE
+
+class UploadDatasetStateInitial extends UploadDatasetState {}
+
+class UploadDatasetStateLoading extends UploadDatasetState {}
+
+class UploadDatasetStateFailure extends UploadDatasetState {}
+
+class UploadDatasetStateSuccess extends UploadDatasetState {}

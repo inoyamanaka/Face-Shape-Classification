@@ -4,12 +4,13 @@ class Routes {
   }
 
   static const splash = '/splash_screen';
-
   static const menu = '/menu';
+
   static const userMenu = '/user_menu';
   static const userGuide = '/user_guide';
   static const userCamera = '/user_camera';
   static const userResult = '/user_result';
 
   static const trainMenu = '/train_menu';
+  static const trainPreprocess = '/train_preprocess';
 }

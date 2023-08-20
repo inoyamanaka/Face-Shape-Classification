@@ -26,8 +26,6 @@ class UserMenuPage extends StatefulWidget {
 }
 
 class _UserMenuPageState extends State<UserMenuPage> {
-  bool isLoading = false;
-
   late File image;
   String? filePath;
 
@@ -113,8 +111,6 @@ class _UserMenuPageState extends State<UserMenuPage> {
                       const BottomDecoration(),
                     ]),
                   ),
-                  LoadingOverlay(
-                      text: "Mohon Tunggu Sebentar...", isLoading: isLoading)
                 ]);
               },
             ),

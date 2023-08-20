@@ -8,7 +8,7 @@ part of 'get_image_model.dart';
 
 GetImageModel _$GetImageModelFromJson(Map<String, dynamic> json) =>
     GetImageModel(
-      bentukWajah: json['bentuk_wajah'] as String,
-      persentase: (json['persen'] as num).toDouble(),
-      urls: (json['urls'] as List<dynamic>).map((e) => e as String).toList(),
+      urls: (json['urls'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      bentukWajah: json['bentuk_wajah'] as String?,
+      persentase: (json['persentase'] as num?)?.toDouble(),
     );

@@ -6,7 +6,8 @@ import 'package:face_shape/features/classification/presentation/pages/user_menu_
 import 'package:face_shape/features/classification/presentation/pages/user_menu_guide.dart';
 import 'package:face_shape/features/classification/presentation/pages/user_menu_page.dart';
 import 'package:face_shape/features/classification/presentation/pages/user_menu_result.dart';
-import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
+import 'package:face_shape/features/training/presentation/pages/train_menu_page.dart';
+import 'package:face_shape/features/training/presentation/pages/train_menu_preprocess_page.dart';
 import 'package:face_shape/splash_page.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,8 @@ class Nav {
       page: () => const SplashScreen(),
       transition: Transition.cupertino,
     ),
+
+    // CLASSIFICATION PAGE
     GetPage(
       name: Routes.menu,
       page: () => const MenuMode(),
@@ -42,9 +45,17 @@ class Nav {
       page: () => const ReportScreen(),
       transition: Transition.cupertino,
     ),
+
+    // TRAIN PAGE
     GetPage(
       name: Routes.trainMenu,
-      page: () => const DevMenuPage(),
+      page: () => const TrainMenuPage(),
+      transition: Transition.cupertino,
+    ),
+
+    GetPage(
+      name: Routes.trainPreprocess,
+      page: () => const TrainPreprocessingPage(),
       transition: Transition.cupertino,
     ),
   ];

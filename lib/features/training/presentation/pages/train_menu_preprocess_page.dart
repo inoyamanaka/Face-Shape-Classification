@@ -1,10 +1,9 @@
-import 'package:face_shape/Datas/url_host.dart';
 import 'package:face_shape/config/config.dart';
+import 'package:face_shape/config/config_url.dart';
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
-import 'package:face_shape/features/training/presentation/pages/dev_menu_page.dart';
+import 'package:face_shape/features/training/presentation/pages/train_menu_page.dart';
 import 'package:face_shape/features/training/presentation/pages/dev_menu_verification_page.dart';
 import 'package:face_shape/widgets/custom_header_2.dart';
-import 'package:face_shape/widgets/custom_media2.dart';
 import 'package:face_shape/widgets/cutom_deskripsi_preprocess.dart';
 import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +11,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 
-class PreprocessingScreen extends StatefulWidget {
-  const PreprocessingScreen({super.key});
+class TrainPreprocessingPage extends StatefulWidget {
+  const TrainPreprocessingPage({super.key});
 
   @override
-  State<PreprocessingScreen> createState() => _PreprocessingScreenState();
+  State<TrainPreprocessingPage> createState() => _TrainPreprocessingPageState();
 }
 
-class _PreprocessingScreenState extends State<PreprocessingScreen> {
+class _TrainPreprocessingPageState extends State<TrainPreprocessingPage> {
   String _selectedOption = "adam";
   String _numberepoch = "3";
   String _numberbatch = "16";
@@ -75,9 +74,7 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
         Navigator.push(
           context,
           PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: VerifScreen(),
-          ),
+              type: PageTransitionType.rightToLeftWithFade, child: Container()),
         );
       } else {
         print('Failed to send textfield value');
@@ -90,7 +87,7 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
         onWillPop: () async {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => DevMenuPage()),
+            MaterialPageRoute(builder: (context) => TrainMenuPage()),
           );
           return false;
         },
@@ -123,8 +120,8 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
               ),
               const SizedBox(height: 5),
             ]),
-            DevNextButton(
-                sendDropdownValue, sendTextFieldEpoch, sendTextFieldBatch),
+            // DevNextButton(
+            //     sendDropdownValue, sendTextFieldEpoch, sendTextFieldBatch),
             LoadingOverlay(
               text: "Mohon Tunggu Sebentar...",
               isLoading: _isLoading,
@@ -135,28 +132,28 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
     );
   }
 
-  Positioned DevNextButton(
-      Future<void> sendDropdownValue(String dropdownValue),
-      Future<void> sendTextFieldEpoch(String textFieldValue),
-      Future<void> sendTextFieldBatch(String textFieldValue)) {
-    return Positioned(
-      bottom: 10,
-      left: 20,
-      right: 20,
-      child: CustomButton2(
-        isi: "Berikutnya",
-        onTap: () async {
-          setState(() {
-            _isLoading = true;
-          });
-          // _isLoading = true;
-          sendDropdownValue(_selectedOption);
-          sendTextFieldEpoch(_numberepoch);
-          sendTextFieldBatch(_numberbatch);
-        },
-      ),
-    );
-  }
+  // Positioned DevNextButton(
+  //     Future<void> sendDropdownValue(String dropdownValue),
+  //     Future<void> sendTextFieldEpoch(String textFieldValue),
+  //     Future<void> sendTextFieldBatch(String textFieldValue)) {
+  //   return Positioned(
+  //     bottom: 10,
+  //     left: 20,
+  //     right: 20,
+  //     child: CustomButton2(
+  //       isi: "Berikutnya",
+  //       onTap: () async {
+  //         setState(() {
+  //           _isLoading = true;
+  //         });
+  //         // _isLoading = true;
+  //         sendDropdownValue(_selectedOption);
+  //         sendTextFieldEpoch(_numberepoch);
+  //         sendTextFieldBatch(_numberbatch);
+  //       },
+  //     ),
+  //   );
+  // }
 
   Container ParamsInputForm(MyFonts myFonts, MyColors myColor, double tli) {
     return Container(
@@ -386,7 +383,7 @@ class _PreprocessingScreenState extends State<PreprocessingScreen> {
           context,
           PageTransition(
               type: PageTransitionType.rightToLeftWithFade,
-              child: DevMenuPage()),
+              child: TrainMenuPage()),
           // ),
         );
       },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:face_shape/Datas/url_host.dart';
 
 class FaceCroppingCard extends StatefulWidget {
   final String deskripsi;
