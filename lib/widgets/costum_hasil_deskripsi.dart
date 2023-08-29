@@ -8,8 +8,9 @@ class HasilAkurasiCard extends StatelessWidget {
   final int _persentase;
   final int data;
 
-  HasilAkurasiCard(
-      this._bentuk_wajah, this.judul, this.mode, this._persentase, this.data);
+  const HasilAkurasiCard(
+      this._bentuk_wajah, this.judul, this.mode, this._persentase, this.data,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class HasilAkurasiCard extends StatelessWidget {
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color.fromARGB(255, 19, 21, 34),
+        color: const Color.fromARGB(255, 19, 21, 34),
         border: Border.all(
           color: Colors.black,
           width: 2.0,
@@ -26,12 +27,12 @@ class HasilAkurasiCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Text(
-            this.judul,
-            style: TextStyle(
+            judul,
+            style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Urbanist',
                 fontWeight: FontWeight.w700,
@@ -44,11 +45,11 @@ class HasilAkurasiCard extends StatelessWidget {
                   horizontal: 12,
                   vertical: 33,
                 ),
-                child: Container(
+                child: SizedBox(
                   width: 150,
                   child: Text(
                     "Anda mendapatkan akurasi pada data $mode sebesar $_persentase% dari jumlah data $data",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w300,
@@ -56,7 +57,7 @@ class HasilAkurasiCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Container(
@@ -74,13 +75,13 @@ class HasilAkurasiCard extends StatelessWidget {
                       100), // nilai progress saat ini (dalam bentuk desimal)
                   center: Text(
                     "$_persentase%",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w300,
                         color: Colors.white),
                   ), // teks persentase
-                  progressColor: Color.fromARGB(255, 80, 101, 252),
+                  progressColor: const Color.fromARGB(255, 80, 101, 252),
                   backgroundColor: Colors.white,
 
                   animationDuration: 500,

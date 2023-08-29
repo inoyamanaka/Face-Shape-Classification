@@ -40,3 +40,29 @@ class GetInfoStateSuccess extends TrainState {
 
   const GetInfoStateSuccess(this.result);
 }
+
+// GET IMAGE PREPROCESS
+class GetImagePrepStateInitial extends TrainState {}
+
+class GetImagePrepStateLoading extends TrainState {}
+
+class GetImagePrepStateFailure extends TrainState {}
+
+class GetImagePrepStateSuccess extends TrainState {
+  final TrainPreprocessEntity result;
+
+  const GetImagePrepStateSuccess(this.result);
+}
+
+// GET TRAIN RESULT
+class GetTrainResultStateInitial extends TrainState {}
+
+class GetTrainResultStateLoading extends TrainState {}
+
+class GetTrainResultStateFailure extends TrainState {}
+
+class GetTrainResultStateSuccess extends TrainState {
+  final TrainResultEntity result;
+
+  const GetTrainResultStateSuccess(this.result);
+}

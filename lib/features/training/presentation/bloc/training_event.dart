@@ -14,11 +14,14 @@ class UploadDatasetEvent extends TrainEvent {
     required this.filepath,
   });
 }
+
 class SetParamEvent extends TrainEvent {
   final ParamBody body;
   const SetParamEvent({required this.body});
 }
 
-class GetInfoEvent extends TrainEvent{
-  
-}
+class GetInfoEvent extends TrainEvent {}
+
+class GetImagePrepEvent extends TrainEvent {}
+
+class GetTrainResultEvent extends TrainEvent {}

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ImageSlide extends StatefulWidget {
   final List<String> imageList;
-  ImageSlide({required this.imageList});
+  const ImageSlide({super.key, required this.imageList});
 
   @override
   State<ImageSlide> createState() => _ImageSlideState();
@@ -15,9 +15,9 @@ class _ImageSlideState extends State<ImageSlide> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.imageList);
+    // print(widget.imageList);
     return Column(children: [
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       widget.imageList == null
@@ -37,7 +37,7 @@ class _ImageSlideState extends State<ImageSlide> {
               ),
               child: CarouselSlider(
                 items: widget.imageList.map((image) {
-                  return Container(
+                  return SizedBox(
                     height: 300,
                     width: 330,
                     child: Stack(children: [
@@ -47,8 +47,8 @@ class _ImageSlideState extends State<ImageSlide> {
                         child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)))),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10)))),
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -64,7 +64,7 @@ class _ImageSlideState extends State<ImageSlide> {
                               child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey[300],
-                                      borderRadius: BorderRadius.all(
+                                      borderRadius: const BorderRadius.all(
                                           Radius.circular(10)))),
                             );
                           },
@@ -80,7 +80,7 @@ class _ImageSlideState extends State<ImageSlide> {
                   enableInfiniteScroll: true,
                   reverse: false,
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayInterval: const Duration(seconds: 3),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
                   scrollDirection: Axis.horizontal,
@@ -92,7 +92,7 @@ class _ImageSlideState extends State<ImageSlide> {
                 ),
               ),
             ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Row(
@@ -101,12 +101,12 @@ class _ImageSlideState extends State<ImageSlide> {
           int index = entry.key;
           // String image = entry.value;
           return AnimatedContainer(
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             width: _currentIndex == index ? 25 : 10,
             height: 10,
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               shape: BoxShape.rectangle,
               color: _currentIndex == index ? Colors.black : Colors.grey,
             ),

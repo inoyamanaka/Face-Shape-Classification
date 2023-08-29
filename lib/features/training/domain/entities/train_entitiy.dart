@@ -44,18 +44,18 @@ class DataInfoEntity extends Equatable {
 }
 
 class TrainPreprocessEntity extends Equatable{
-  List<String> faceCrop;
+  // List<String> faceCrop;
     List<String> faceLandmark;
     List<String> landmarkExtraction;
 
     TrainPreprocessEntity({
-        required this.faceCrop,
+        // required this.faceCrop,
         required this.faceLandmark,
         required this.landmarkExtraction,
     });
     
       @override
-      List<Object?> get props => [faceCrop, faceLandmark, landmarkExtraction];
+      List<Object?> get props => [faceLandmark, landmarkExtraction];
 
 }
 

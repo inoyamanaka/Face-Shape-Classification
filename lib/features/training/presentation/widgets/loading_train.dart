@@ -11,14 +11,14 @@ class LoadingOverlayTrain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
-          decoration: const BoxDecoration(
-            color: Colors.black,
-          ),
-          child: const ModalBarrier(
-            dismissible: false,
-            color: Colors.transparent,
-          ),
+        decoration: const BoxDecoration(
+          color: Colors.black,
         ),
+        child: const ModalBarrier(
+          dismissible: false,
+          color: Colors.transparent,
+        ),
+      ),
       Center(
         child: Container(
           width: 250,
@@ -45,7 +45,7 @@ class LoadingOverlayTrain extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 13.sp,
+                      fontSize: 15.sp,
                       fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w300),
                 ),

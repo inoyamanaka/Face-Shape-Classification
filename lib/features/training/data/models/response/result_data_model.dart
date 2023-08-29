@@ -7,7 +7,7 @@ part 'result_data_model.g.dart';
 @JsonSerializable(createToJson: false, fieldRename: FieldRename.snake)
 class TrainPreprocessModel extends TrainPreprocessEntity {
   TrainPreprocessModel(
-      {required super.faceCrop,
+      {
       required super.faceLandmark,
       required super.landmarkExtraction});
 

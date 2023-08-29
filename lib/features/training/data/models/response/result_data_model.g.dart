@@ -9,8 +9,6 @@ part of 'result_data_model.dart';
 TrainPreprocessModel _$TrainPreprocessModelFromJson(
         Map<String, dynamic> json) =>
     TrainPreprocessModel(
-      faceCrop:
-          (json['face_crop'] as List<dynamic>).map((e) => e as String).toList(),
       faceLandmark: (json['face_landmark'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
