@@ -1,31 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:equatable/equatable.dart';
-
-class TrainEntity {
-  String trainAcc;
-  String valAcc;
-  String plotAcc;
-  String plotLoss;
-  String conf;
-
-  TrainEntity({
-    required this.trainAcc,
-    required this.valAcc,
-    required this.plotAcc,
-    required this.plotLoss,
-    required this.conf,
+class ParamEntity extends Equatable {
+  const ParamEntity({
+    required this.message,
   });
-}
 
-class ParameterEntity {
-  String fungsiAktivasi;
-  int jumlahEpoch;
-  int batchSize;
+  final String message;
 
-  ParameterEntity({
-    required this.fungsiAktivasi,
-    required this.jumlahEpoch,
-    required this.batchSize,
-  });
+  @override
+  List<Object?> get props => [message];
 }
 
 class UploadDatasetEntity extends Equatable {
@@ -39,12 +23,57 @@ class UploadDatasetEntity extends Equatable {
   List<Object?> get props => [message];
 }
 
-class DatasetEntity {
-  int training;
-  int testing;
+class DataInfoEntity extends Equatable {
+  String optimizer;
+  int epoch;
+  int batchSize;
+  List<int> trainingCounts;
+  List<int> testingCounts;
 
-  DatasetEntity({
-    required this.training,
-    required this.testing,
+  DataInfoEntity({
+    required this.optimizer,
+    required this.epoch,
+    required this.batchSize,
+    required this.trainingCounts,
+    required this.testingCounts,
   });
+
+  @override
+  List<Object?> get props =>
+      [optimizer, epoch, batchSize, trainingCounts, testingCounts];
+}
+
+class TrainPreprocessEntity extends Equatable{
+  List<String> faceCrop;
+    List<String> faceLandmark;
+    List<String> landmarkExtraction;
+
+    TrainPreprocessEntity({
+        required this.faceCrop,
+        required this.faceLandmark,
+        required this.landmarkExtraction,
+    });
+    
+      @override
+      List<Object?> get props => [faceCrop, faceLandmark, landmarkExtraction];
+
+}
+
+class TrainResultEntity extends Equatable{
+  double trainAcc;
+    double valAcc;
+    String plotAcc;
+    String plotLoss;
+    String conf;
+
+    TrainResultEntity({
+        required this.trainAcc,
+        required this.valAcc,
+        required this.plotAcc,
+        required this.plotLoss,
+        required this.conf,
+    });
+    
+      @override
+      List<Object?> get props => [trainAcc, valAcc, plotAcc, plotLoss, conf];
 }

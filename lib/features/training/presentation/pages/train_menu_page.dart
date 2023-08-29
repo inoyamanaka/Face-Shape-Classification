@@ -1,8 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
+import 'package:face_shape/config/config.dart';
+import 'package:face_shape/core/di/injection.dart';
+import 'package:face_shape/core/router/routes.dart';
+import 'package:face_shape/features/training/data/models/request/train_request.dart';
+import 'package:face_shape/features/training/presentation/bloc/training_bloc.dart';
 import 'package:face_shape/features/training/presentation/widgets/dialogue.dart';
 import 'package:face_shape/features/training/presentation/widgets/loading_train.dart';
+import 'package:face_shape/features/training/presentation/widgets/subtitle_train.dart';
+import 'package:face_shape/features/training/presentation/widgets/title_train.dart';
+import 'package:face_shape/features/training/presentation/widgets/top_decoration_train.dart';
+import 'package:face_shape/features/training/presentation/widgets/train_custom_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -10,17 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
-import 'package:face_shape/config/config.dart';
-import 'package:face_shape/core/di/injection.dart';
-import 'package:face_shape/core/router/routes.dart';
-import 'package:face_shape/features/training/data/datasources/upload_dataset_datasource.dart';
-import 'package:face_shape/features/training/data/models/request/upload_dataset_filepath.dart';
-import 'package:face_shape/features/training/presentation/bloc/training_bloc.dart';
-import 'package:face_shape/features/training/presentation/widgets/subtitle_train.dart';
-import 'package:face_shape/features/training/presentation/widgets/title_train.dart';
-import 'package:face_shape/features/training/presentation/widgets/top_decoration_train.dart';
-import 'package:face_shape/features/training/presentation/widgets/train_custom_button.dart';
 
 class TrainMenuPage extends StatefulWidget {
   const TrainMenuPage({super.key});
@@ -34,10 +30,8 @@ class _TrainMenuPage extends State<TrainMenuPage>
   late AnimationController loadingController;
   late ValueNotifier<double> loadingControllerP;
   late PlatformFile platformFile;
-  final uploadBlocTrain = sl<UploadDatasetBloc>();
-  final UploadDatasetDataSourceImpl uploadDataSource =
-      UploadDatasetDataSourceImpl(Dio());
 
+  final uploadBloc = sl<TrainBloc>();
   // ValueNotifier<double> loadingControllerP = ValueNotifier<double>(0.0);
 
   @override
@@ -73,10 +67,10 @@ class _TrainMenuPage extends State<TrainMenuPage>
         },
         // width: width,
         child: ScreenUtilInit(
-          builder: (context, child) => BlocProvider<UploadDatasetBloc>(
-            create: (context) => uploadBlocTrain,
-            child: BlocConsumer<UploadDatasetBloc, UploadDatasetState>(
-                listener: (context, state) {
+          builder: (context, child) => BlocProvider<TrainBloc>(
+            create: (context) => uploadBloc,
+            child:
+                BlocConsumer<TrainBloc, TrainState>(listener: (context, state) {
               if (state is UploadDatasetStateSuccess) {
                 successDialogue(context);
               }
@@ -85,9 +79,8 @@ class _TrainMenuPage extends State<TrainMenuPage>
                 // uploading();
               }
               if (state is UploadDatasetStateLoading) {
-                return const LoadingOverlay2(
+                return const LoadingOverlayTrain(
                   text: "Mohon Tunggu Upload...",
-                  name: 'upload',
                 );
               }
 
@@ -240,7 +233,7 @@ class _TrainMenuPage extends State<TrainMenuPage>
           FilePickerResult? result = await FilePicker.platform.pickFiles();
           String? path = result!.files.first.path;
           // isSucces = await uploadDataset.call(path!, loadingControllerP);
-          uploadBlocTrain.add(UploadDatasetEvent(
+          uploadBloc.add(UploadDatasetEvent(
               filepath: UploadDatasetFilepathReq(filepath: path!)));
         },
         child: Padding(

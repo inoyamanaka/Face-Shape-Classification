@@ -8,9 +8,17 @@ import 'package:face_shape/features/classification/domain/repositories/upload_im
 import 'package:face_shape/features/classification/domain/usecases/fetch_image.dart';
 import 'package:face_shape/features/classification/domain/usecases/upload_image.dart';
 import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
+import 'package:face_shape/features/training/data/datasources/data_info_datasource.dart';
+import 'package:face_shape/features/training/data/datasources/settings_parameter.dart';
 import 'package:face_shape/features/training/data/datasources/upload_dataset_datasource.dart';
+import 'package:face_shape/features/training/data/repositories/data_info_repositories.dart';
+import 'package:face_shape/features/training/data/repositories/param_repositories_impl.dart';
 import 'package:face_shape/features/training/data/repositories/upload_dataset_repositories_impl.dart';
+import 'package:face_shape/features/training/domain/repositories/data_info_repositories.dart';
+import 'package:face_shape/features/training/domain/repositories/param_repositories.dart';
 import 'package:face_shape/features/training/domain/repositories/upload_dataset_repositories.dart';
+import 'package:face_shape/features/training/domain/usecases/data_info_usecase.dart';
+import 'package:face_shape/features/training/domain/usecases/set_params.dart';
 import 'package:face_shape/features/training/domain/usecases/upload_dataset.dart';
 import 'package:face_shape/features/training/presentation/bloc/training_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -56,6 +64,26 @@ class Injection {
       ..registerLazySingleton(
         () => UploadDatasetUseCase(sl()),
       )
-      ..registerFactory(() => UploadDatasetBloc(sl()));
+      // -- Set Params
+      ..registerLazySingleton<ParamDataSource>(
+        () => ParamDataSourceImpl(sl()),
+      )
+      ..registerLazySingleton<ParamRepository>(
+        () => ParamRespositoryImpl(sl()),
+      )
+      ..registerLazySingleton(
+        () => SetParamsUseCase(sl()),
+      )
+      // -- Get info
+      ..registerLazySingleton<DataInfoDataSource>(
+        () => DataInfoDataSourceImpl(sl()),
+      )
+      ..registerLazySingleton<DataInfoRepository>(
+        () => DataInfoRepositoriesImpl(sl()),
+      )
+      ..registerLazySingleton(
+        () => DataInfoUseCase(sl()),
+      )
+      ..registerFactory(() => TrainBloc(sl(), sl(), sl()));
   }
 }

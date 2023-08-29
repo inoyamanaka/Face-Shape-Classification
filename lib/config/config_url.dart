@@ -3,7 +3,7 @@
 class ApiUrl {
   // static const Url = "http://192.168.100.243:8080";
 
-  static const Url = "https://6b52-149-113-69-37.ngrok-free.app";
+  static const Url = "https://41e2-103-247-120-109.ngrok-free.app";
 
   // static const Url = "https://yamanaka1.pagekite.me";
   static const Url_pred = "${ApiUrl.Url}/upload";
@@ -24,6 +24,8 @@ class ApiUrl {
   static const Url_epoch = '${ApiUrl.Url}/textfield';
   static const Url_batch_size = '${ApiUrl.Url}/textfield2';
 
-  static const Url_get_info = '${ApiUrl.Url}/getinfo';
+  static const Url_params = '${ApiUrl.Url}/set_params';
+
+  static const Url_get_info = '${ApiUrl.Url}/get_info';
   static const Url_fetch_progress = '${ApiUrl.Url}/progress';
 }

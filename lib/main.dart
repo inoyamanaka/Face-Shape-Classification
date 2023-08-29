@@ -2,14 +2,11 @@ import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/router/navigation.dart';
 import 'package:face_shape/core/router/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 // GetIt sl = GetIt.instance;
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   inject();
   runApp(const MyApp());
 }
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.splash,
+        initialRoute: Routes.trainVerif,
         getPages: Nav.routes);
   }
 }

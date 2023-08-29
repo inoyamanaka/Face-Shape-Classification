@@ -13,4 +13,6 @@ class Routes {
 
   static const trainMenu = '/train_menu';
   static const trainPreprocess = '/train_preprocess';
+  static const trainVerif = '/train_verification';
+  static const trainResult = '/train_result';
 }

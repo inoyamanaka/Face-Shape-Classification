@@ -48,7 +48,7 @@ class _MenuModeState extends State<MenuMode> {
               contentImage().animate().fade(duration: GetNumUtils(0.5).seconds),
               sliderIndicator(),
               subDescription().animate().slideY(begin: 1, end: 0),
-              buttonRow(context)
+              buttonRow(context),
             ],
           ),
         ),
@@ -154,7 +154,7 @@ class _MenuModeState extends State<MenuMode> {
 
   Padding subDescription() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
       child: Text(MainMenuAtt.deskripsi[_currentIndex],
           textAlign: TextAlign.center,
           style: TextStyle(

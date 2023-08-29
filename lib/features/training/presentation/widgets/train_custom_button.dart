@@ -13,47 +13,38 @@ class TrainNextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        left: 20.w,
-        right: 20.w,
-        bottom: 10.h,
-        child: InkWell(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(seconds: 2),
-            height: 55,
-            width: 325,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: MyColors().primary,
-              border: Border.all(
-                color: Colors.black,
-                width: 2.0,
+    return InkWell(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(seconds: 2),
+        height: 55,
+        width: 325,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: MyColors().primary,
+          border: Border.all(
+            color: Colors.black,
+            width: 2.0,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(width: 5.w),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontFamily: 'Urbanist',
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Image.asset(
-                //   "Assets/Icons/next.png",
-                //   width: 30,
-                //   height: 30,
-                // ),
-                SizedBox(width: 5.w),
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontFamily: 'Urbanist',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(width: 5.w),
-              ],
-            ),
-          ),
-        ));
+            SizedBox(width: 5.w),
+          ],
+        ),
+      ),
+    );
   }
 }

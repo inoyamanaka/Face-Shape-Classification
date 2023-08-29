@@ -8,6 +8,8 @@ import 'package:face_shape/features/classification/presentation/pages/user_menu_
 import 'package:face_shape/features/classification/presentation/pages/user_menu_result.dart';
 import 'package:face_shape/features/training/presentation/pages/train_menu_page.dart';
 import 'package:face_shape/features/training/presentation/pages/train_menu_preprocess_page.dart';
+import 'package:face_shape/features/training/presentation/pages/train_menu_result.dart';
+import 'package:face_shape/features/training/presentation/pages/train_menu_verification_page.dart';
 import 'package:face_shape/splash_page.dart';
 import 'package:get/get.dart';
 
@@ -52,10 +54,19 @@ class Nav {
       page: () => const TrainMenuPage(),
       transition: Transition.cupertino,
     ),
-
     GetPage(
       name: Routes.trainPreprocess,
       page: () => const TrainPreprocessingPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Routes.trainVerif,
+      page: () => const TrainVerifPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Routes.trainResult,
+      page: () => const TrainResultPage(),
       transition: Transition.cupertino,
     ),
   ];

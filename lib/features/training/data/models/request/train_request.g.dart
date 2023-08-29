@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'upload_dataset_filepath.dart';
+part of 'train_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

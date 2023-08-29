@@ -15,7 +15,7 @@ class CustomList2 extends StatelessWidget {
         RichText(
           text: TextSpan(
             text: "• ",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.black,
               fontFamily: 'Urbanist',
@@ -23,8 +23,8 @@ class CustomList2 extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: this.preprocessing,
-                style: TextStyle(
+                text: preprocessing,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
                   fontFamily: 'Urbanist',

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'upload_dataset_filepath.g.dart';
+part 'train_request.g.dart';
 
 @JsonSerializable(createFactory: false)
 class UploadDatasetFilepathReq {

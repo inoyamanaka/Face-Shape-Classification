@@ -2,7 +2,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:face_shape/core/error/failures.dart';
 import 'package:face_shape/features/training/data/datasources/upload_dataset_datasource.dart';
-import 'package:face_shape/features/training/data/models/request/upload_dataset_filepath.dart';
+import 'package:face_shape/features/training/data/models/request/train_request.dart';
 import 'package:face_shape/features/training/domain/entities/train_entitiy.dart';
 import 'package:face_shape/features/training/domain/repositories/upload_dataset_repositories.dart';
 
