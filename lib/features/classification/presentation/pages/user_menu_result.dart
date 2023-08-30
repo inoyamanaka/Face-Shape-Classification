@@ -1,15 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dio/dio.dart';
 import 'package:face_shape/config/config.dart';
-import 'package:face_shape/config/config_url.dart';
 import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/models/ciri_wajah.dart';
 import 'package:face_shape/core/router/routes.dart';
 import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
 import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
 import 'package:face_shape/features/classification/presentation/widgets/user_result_card.dart';
-import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +87,7 @@ class _ReportScreenState extends State<ReportScreen> {
                               imageResult2(
                                       height,
                                       state.dataImageEntity.bentukWajah!,
-                                      state.dataImageEntity.persentase!)
+                                      state.dataImageEntity.persen!)
                                   .animate()
                                   .slideY(
                                       begin: 1,
@@ -125,7 +123,7 @@ class _ReportScreenState extends State<ReportScreen> {
       bottom: 10.h,
       child: CustomButton(
         onTap: () async {
-          await Dio().get(ApiUrl.Url_delete_img);
+          // await Dio().get(ApiUrl.Url_delete_img);
           Get.toNamed(Routes.menu);
         },
         text: "main menu",

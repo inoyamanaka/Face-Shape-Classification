@@ -10,5 +10,5 @@ GetImageModel _$GetImageModelFromJson(Map<String, dynamic> json) =>
     GetImageModel(
       urls: (json['urls'] as List<dynamic>?)?.map((e) => e as String).toList(),
       bentukWajah: json['bentuk_wajah'] as String?,
-      persentase: (json['persentase'] as num?)?.toDouble(),
+      persen: (json['persen'] as num?)?.toDouble(),
     );

@@ -1,7 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:camera/camera.dart';
 import 'package:face_shape/config/config.dart';
+import 'package:face_shape/core/di/injection.dart';
 import 'package:face_shape/core/router/routes.dart';
+import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
+import 'package:face_shape/features/classification/presentation/widgets/bottom_decoration.dart';
+import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
 import 'package:face_shape/features/classification/presentation/widgets/dialogue.dart';
+import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
+import 'package:face_shape/features/classification/presentation/widgets/subtitle_page.dart';
+import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
+import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,14 +20,6 @@ import 'package:get/get.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-
-import 'package:face_shape/core/di/injection.dart';
-import 'package:face_shape/features/classification/presentation/bloc/classification_bloc.dart';
-import 'package:face_shape/features/classification/presentation/widgets/bottom_decoration.dart';
-import 'package:face_shape/features/classification/presentation/widgets/custom_button.dart';
-import 'package:face_shape/features/classification/presentation/widgets/subtitle_page.dart';
-import 'package:face_shape/features/classification/presentation/widgets/title_page.dart';
-import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
 
 import '../../data/models/request/upload_image_model.dart';
 
@@ -115,7 +117,12 @@ class _CameraScreenState extends State<CameraScreen> {
                 bloc: uploadBloc,
                 listener: (context, state) {
                   // print(state);
-                  if (state is UploadClassificationLoading) {}
+                  if (state is UploadClassificationLoading) {
+                    const LoadingOverlay(
+                      isLoading: true,
+                      text: "Menampilkan Hasil.......",
+                    );
+                  }
                   if (state is UploadClassificationFailure) {
                     noFaceDetection;
                   }
@@ -177,7 +184,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(25),
                           child: AspectRatio(
-                            aspectRatio: 1.0 / 1.0,
+                            aspectRatio: 3.0 / 4.0,
                             child: CameraPreview(_controller),
                           ),
                         )
@@ -222,10 +229,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
         XFile picture = await _controller.takePicture();
         await picture.saveTo(filePath!);
-
-        // debugPrint("filepath : ${filePath!}");
-
-        // ignore: use_build_context_synchronously
         takePictureDialog(context, filePath!).show();
       },
       child: SvgPicture.asset("Assets/Svgs/camera_take.svg"),

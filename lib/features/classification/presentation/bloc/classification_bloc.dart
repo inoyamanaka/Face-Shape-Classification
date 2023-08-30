@@ -38,7 +38,6 @@ class ClassificationBlocGet
     on<GetEvent>((event, emit) async {
       emit(GetClassificationLoading());
       final result = await getImageUsecase.call(NoParams());
-      print(result);
       result.fold((l) {
         // print(l);
         emit(GetClassificationFailure(l.message));

@@ -27,8 +27,7 @@ class UploadDatasetDataSourceImpl implements UploadDatasetDataSource {
 
       final response = await client.post(ApiUrl.Url_model, data: formData,
           onSendProgress: (int sentBytes, int totalBytes) {
-        double progressPercent = (sentBytes / totalBytes) * 100 / 100;
-        print(progressPercent);
+        // double progressPercent = (sentBytes / totalBytes) * 100 / 100;
       });
 
       return UploadDatasetModel.fromJson(response.data);

@@ -12,12 +12,7 @@ class ParamRespositoryImpl implements ParamRepository {
 
   @override
   Future<Either<Failure, ParamEntity>> setParams(ParamBody body) async {
-    // print(body.batchSize);
-    // print(body.epoch);
-    // print(body.optimizer);
-
     final remoteParam = await datasource.setParams(body);
-    print(remoteParam);
     return Right(remoteParam);
   }
 }

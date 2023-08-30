@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class HasilAkurasiCard extends StatelessWidget {
-  final String _bentuk_wajah;
   final String judul;
   final String mode;
   final int _persentase;
   final int data;
 
-  const HasilAkurasiCard(
-      this._bentuk_wajah, this.judul, this.mode, this._persentase, this.data,
+  const HasilAkurasiCard(this.judul, this.mode, this._persentase, this.data,
       {super.key});
 
   @override
@@ -83,10 +81,8 @@ class HasilAkurasiCard extends StatelessWidget {
                   ), // teks persentase
                   progressColor: const Color.fromARGB(255, 80, 101, 252),
                   backgroundColor: Colors.white,
-
                   animationDuration: 500,
                   animation: true,
-                  // borderColor: Colors.white,
                 ),
               ),
             ],

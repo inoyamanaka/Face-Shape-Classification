@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:dio/dio.dart';
 import 'package:face_shape/config/config_url.dart';
 import 'package:face_shape/features/classification/data/models/request/upload_image_model.dart';
@@ -30,7 +32,7 @@ class ReqClassificationRemoteDataSourceImpl
           response.data!); // Placeholder return value, modify as needed
     } catch (error) {
       // Handle errors here
-      return throw (error);
+      rethrow;
     }
   }
 }

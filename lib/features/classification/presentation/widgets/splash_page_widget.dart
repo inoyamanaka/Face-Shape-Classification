@@ -18,8 +18,7 @@ class SplashWidget extends StatelessWidget {
       color: Colors.amber,
       child: AnimatedSplashScreen(
         duration: 5000,
-        splash: Container(
-          child: Stack(children: [
+        splash:  Stack(children: [
             Image.asset(
               "Assets/Images/Tampilan awal.png",
               height: height,
@@ -40,7 +39,6 @@ class SplashWidget extends StatelessWidget {
               ),
             ),
           ]),
-        ),
         nextScreen: const MenuMode(),
         splashTransition: SplashTransition.fadeTransition,
         splashIconSize: height,

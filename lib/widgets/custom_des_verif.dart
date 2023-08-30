@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class CustomList extends StatelessWidget {
@@ -17,7 +19,7 @@ class CustomList extends StatelessWidget {
         RichText(
           text: TextSpan(
             text: "• ",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.black,
               fontFamily: 'Urbanist',
@@ -25,8 +27,8 @@ class CustomList extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: this.bentuk_wajah,
-                style: TextStyle(
+                text: bentuk_wajah,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
                   fontFamily: 'Urbanist',
@@ -41,7 +43,7 @@ class CustomList extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               text: "• ",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black,
                 fontFamily: 'Urbanist',
@@ -49,8 +51,8 @@ class CustomList extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: "${jumlah_data} Buah Data Gambar",
-                  style: TextStyle(
+                  text: "$jumlah_data Buah Data Gambar",
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontFamily: 'Urbanist',

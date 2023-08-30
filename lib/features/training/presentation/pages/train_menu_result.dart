@@ -7,10 +7,10 @@ import 'package:face_shape/features/classification/presentation/widgets/custom_b
 import 'package:face_shape/features/classification/presentation/widgets/loading.dart';
 import 'package:face_shape/features/classification/presentation/widgets/top_decoration.dart';
 import 'package:face_shape/features/training/presentation/bloc/training_bloc.dart';
+import 'package:face_shape/features/training/presentation/widgets/custom_image_slide.dart';
 import 'package:face_shape/features/training/presentation/widgets/loading_train.dart';
 import 'package:face_shape/features/training/presentation/widgets/title_train.dart';
 import 'package:face_shape/widgets/costum_hasil_deskripsi.dart';
-import 'package:face_shape/widgets/custom_image_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,12 +30,13 @@ final trainBloc = sl<TrainBloc>();
 List<String> imageUrlsCrop = [];
 List<String> imageUrlsLandmark = [];
 List<String> imageUrlsExtract = [];
+List<int> jumlahData = [];
 
 class _TrainResultPageState extends State<TrainResultPage> {
   @override
   void initState() {
     super.initState();
-    trainBloc.add(GetImagePrepEvent());
+    trainBloc.add(GetInfoEvent());
   }
 
   @override
@@ -54,9 +55,21 @@ class _TrainResultPageState extends State<TrainResultPage> {
             create: (context) => trainBloc,
             child:
                 BlocBuilder<TrainBloc, TrainState>(builder: (context, state) {
+              if (state is GetInfoStateLoading) {
+                return const LoadingOverlayTrain(
+                  text: 'Data Preprocessing.....',
+                );
+              }
+              if (state is GetInfoStateSuccess) {
+                jumlahData = [
+                  state.result.testingCounts[6],
+                  state.result.trainingCounts[6]
+                ];
+                trainBloc.add(GetImagePrepEvent());
+              }
               if (state is GetImagePrepStateLoading) {
                 return const LoadingOverlayTrain(
-                  text: 'Mohon tunggu sebentar....',
+                  text: 'Data Preprocessing.....',
                 );
               }
               if (state is GetImagePrepStateSuccess) {
@@ -105,27 +118,29 @@ class _TrainResultPageState extends State<TrainResultPage> {
                                         const SizedBox(height: 15),
                                         // AccurationTitle(),
                                         const SizedBox(height: 10),
-                                        trainingResult(50, 1000),
+                                        trainingResult(state.result.trainAcc,
+                                            jumlahData[1]),
                                         const SizedBox(height: 15),
-                                        testingResult(50, 100),
+                                        testingResult(
+                                            state.result.valAcc, jumlahData[0]),
                                         const SizedBox(height: 15),
                                         const TitlePage(
                                           text: "Plot Akurasi",
                                         ),
                                         const SizedBox(height: 15),
-                                        accurationGraphic(),
+                                        accurationGraphic(state.result.plotAcc),
                                         const SizedBox(height: 15),
                                         const TitlePage(
                                           text: "Plot Loss",
                                         ),
                                         const SizedBox(height: 15),
-                                        lossGraphic(),
+                                        lossGraphic(state.result.plotLoss),
                                         const SizedBox(height: 15),
                                         const TitlePage(
                                           text: "Confusion Matrix",
                                         ),
                                         const SizedBox(height: 15),
-                                        cFGraphic(),
+                                        cFGraphic(state.result.conf),
                                         const SizedBox(height: 35),
                                         saveModelButton(width),
                                         const SizedBox(height: 100),
@@ -228,7 +243,7 @@ class _TrainResultPageState extends State<TrainResultPage> {
     );
   }
 
-  Center cFGraphic() {
+  Center cFGraphic(conf) {
     return Center(
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
@@ -242,8 +257,8 @@ class _TrainResultPageState extends State<TrainResultPage> {
           backgroundDecoration: const BoxDecoration(color: Colors.black),
           maxScale: PhotoViewComputedScale.contained * 1.25,
           minScale: PhotoViewComputedScale.contained,
-          imageProvider: const NetworkImage(
-            '_confimg',
+          imageProvider: NetworkImage(
+            '$conf',
           ),
           errorBuilder:
               (BuildContext context, Object exception, StackTrace? stackTrace) {
@@ -261,7 +276,7 @@ class _TrainResultPageState extends State<TrainResultPage> {
     );
   }
 
-  Center lossGraphic() {
+  Center lossGraphic(plotLoss) {
     return Center(
       child: Container(
         height: 220,
@@ -274,8 +289,8 @@ class _TrainResultPageState extends State<TrainResultPage> {
           backgroundDecoration: const BoxDecoration(color: Colors.black),
           maxScale: PhotoViewComputedScale.contained * 1.25,
           minScale: PhotoViewComputedScale.contained,
-          imageProvider: const NetworkImage(
-            '_lossimg',
+          imageProvider: NetworkImage(
+            '$plotLoss',
           ),
           errorBuilder:
               (BuildContext context, Object exception, StackTrace? stackTrace) {
@@ -293,7 +308,7 @@ class _TrainResultPageState extends State<TrainResultPage> {
     );
   }
 
-  Center accurationGraphic() {
+  Center accurationGraphic(plotAcc) {
     return Center(
       child: Container(
         height: 220,
@@ -306,8 +321,8 @@ class _TrainResultPageState extends State<TrainResultPage> {
           backgroundDecoration: const BoxDecoration(color: Colors.black),
           maxScale: PhotoViewComputedScale.contained * 1.0,
           minScale: PhotoViewComputedScale.contained * 1.0,
-          imageProvider: const NetworkImage(
-            '_accimg',
+          imageProvider: NetworkImage(
+            '$plotAcc',
           ),
           errorBuilder:
               (BuildContext context, Object exception, StackTrace? stackTrace) {
@@ -325,51 +340,23 @@ class _TrainResultPageState extends State<TrainResultPage> {
     );
   }
 
-  // CustomHeader2 PlotTitle() => CustomHeader2(isi: "Plot Akurasi");
-
   Center testingResult(persentase_test, testingValues) {
-    return const Center(
-        child: HasilAkurasiCard(
-            "Oval", "Hasil Laporan Testing", "Testing", 90, 500));
+    return Center(
+        child: HasilAkurasiCard("Hasil Laporan Testing", "Testing",
+            (persentase_test * 100).toInt(), testingValues));
   }
 
-  Center trainingResult(int persentase_train, trainingValues) {
-    return const Center(
-        child: HasilAkurasiCard(
-            "Diamond", "Hasil Laporan Training", "Training", 40, 1000));
+  Center trainingResult(persentase_train, trainingValues) {
+    return Center(
+        child: HasilAkurasiCard("Hasil Laporan Training", "Training",
+            (persentase_train * 100).toInt(), trainingValues));
   }
-
-  // CustomHeader2 AccurationTitle() => CustomHeader2(isi: "Hasil Akurasi");
 
   ImageSlide landmarkExtractionImage(List<String> imageurlsLandmark) {
     return ImageSlide(imageList: imageurlsLandmark);
   }
 
-  // CustomHeader2 LandmarkExtractionTitle() {
-  //   return CustomHeader2(isi: "Landmark Extraction");
-  // }
-
-  Container facialLandmarkImage(List<String> imageurlsLandmark) {
-    return Container(
-      child: imageurlsLandmark != null
-          ? ImageSlide(imageList: imageurlsLandmark)
-          : Center(
-              child: Container(
-                width: 330,
-                height: 300,
-                padding: const EdgeInsets.all(10),
-                child: Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      color: Colors.grey[300],
-                    )),
-              ),
-            ),
-    );
+  ImageSlide facialLandmarkImage(List<String> imageurlsLandmark) {
+    return ImageSlide(imageList: imageurlsLandmark);
   }
-
-  // CustomHeader2 FacialLandmarkTitle() => CustomHeader2(isi: "Facial Landmark");
-
-  // CustomHeader TitlePage() => CustomHeader(isi: "Model Result");
 }

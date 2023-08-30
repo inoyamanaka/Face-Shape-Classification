@@ -8,7 +8,7 @@ class GetImageModel extends DataImageEntity {
   const GetImageModel(
       {required super.urls,
       required super.bentukWajah,
-      required super.persentase});
+      required super.persen});
 
   factory GetImageModel.fromJson(Map<String, dynamic> json) =>
       _$GetImageModelFromJson(json);
